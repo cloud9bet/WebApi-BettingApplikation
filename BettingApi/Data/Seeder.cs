@@ -1,71 +1,71 @@
-// using System;
-// using System.Collections.Generic;
-// using System.Linq;
-// using BettingApi.Models;
-// using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using BettingApi.Models;
 
-// namespace BettingApi.Data
-// {
-//     public static class TestBetDbSeeder
-//     {
-//         public static void Seed(BetAppDbContext context)
-//         {
-//             context.Database.EnsureCreated();
 
-//             // Slet eksisterende data
-//             context.Transactions.RemoveRange(context.Transactions);
-//             context.Users.RemoveRange(context.Users);
-//             context.SaveChanges();
+namespace BettingApi.Data
+{
+    public static class TestBetDbSeeder
+    {
+        public async static Task Seed(BetAppDbContext context, UserManager<ApiUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            context.Database.EnsureCreated();
 
-//             // Resæt identity
-//             context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Users', RESEED, 0)");
-//             context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Transactions', RESEED, 0)");
+            if (await userManager.FindByNameAsync("admin") != null) return;
 
-//             if (!context.Users.Any())
-//             {
-//                 var users = new List<User>
-//                 {
-//                     new User
-//                     {
-//                         Username = "Alice",
-//                         Password = "password123",
-//                         Amount = 1000.0,
-//                         Transactions = new List<Transaction>
-//                         {
-//                             new Transaction { Date = DateTime.Today, Amount = 200.0 },
-//                             new Transaction { Date = DateTime.Today.AddDays(-1), Amount = -50.0 },
-//                             new Transaction { Date = DateTime.Today.AddDays(-2), Amount = 300.0 }
-//                         }
-//                     },
-//                     new User
-//                     {
-//                         Username = "Bob",
-//                         Password = "secure456",
-//                         Amount = 500.0,
-//                         Transactions = new List<Transaction>
-//                         {
-//                             new Transaction { Date = DateTime.Today, Amount = 100.0 },
-//                             new Transaction { Date = DateTime.Today.AddDays(-1), Amount = 50.0 }
-//                         }
-//                     },
-//                     new User
-//                     {
-//                         Username = "Charlie",
-//                         Password = "qwerty789",
-//                         Amount = 750.0,
-//                         Transactions = new List<Transaction>
-//                         {
-//                             new Transaction { Date = DateTime.Today, Amount = 150.0 },
-//                             new Transaction { Date = DateTime.Today.AddDays(-1), Amount = -25.0 },
-//                             new Transaction { Date = DateTime.Today.AddDays(-2), Amount = 50.0 },
-//                             new Transaction { Date = DateTime.Today.AddDays(-3), Amount = 75.0 }
-//                         }
-//                     }
-//                 };
+            // Create roles
+            string[] roleNames = { "Admin", "User" };
+            foreach (var roleName in roleNames)
+            {
+                if (!await roleManager.RoleExistsAsync(roleName))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
 
-//                 context.Users.AddRange(users);
-//                 context.SaveChanges();
-//             }
-//         }
-//     }
-// }
+            var adminUser = new ApiUser
+            {
+                UserName = "admin",
+            };
+
+            if (await userManager.FindByNameAsync("admin") == null)
+            {
+                var result = await userManager.CreateAsync(adminUser, "Admin123456!");
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
+                }
+            }
+
+            var testUserAccount = new UserAccount
+            {
+                UserName = "user",
+            };
+
+            var res = await context.UserAccounts.AddAsync(testUserAccount);
+            await context.SaveChangesAsync();
+
+            if (res != null)
+            {
+                var testUser = new ApiUser
+                {
+                    UserName = testUserAccount.UserName,
+                    UserAccount = testUserAccount
+                };
+
+                if (await userManager.FindByNameAsync("user") == null)
+                {
+                    var result = await userManager.CreateAsync(testUser, "Password123!");
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(testUser, "User");
+                    }
+                }
+            }
+        }
+    }
+
+}

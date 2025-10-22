@@ -165,3 +165,10 @@ C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingAppli
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\BettingApi.pdb
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\BettingApi.genruntimeconfig.cache
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\ref\BettingApi.dll
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\BettingApi.sourcelink.json
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Extensions.Identity.Stores.dll

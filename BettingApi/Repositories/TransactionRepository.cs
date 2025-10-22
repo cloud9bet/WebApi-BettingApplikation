@@ -9,16 +9,16 @@ Task<IEnumerable<TransactionDto>> GetAllTransactionByUseridAsync(int id);
 
 }
 
-
 public class TransactionRepository: Repository<Transaction>, ITransactionRepository
 {
     public TransactionRepository(BetAppDbContext context) : base(context)
     {
 
     }
+    
     public async Task<IEnumerable<TransactionDto>> GetAllTransactionByUseridAsync(int id)
     {
-         var transactions = await _dbSet.Where(d => d.UserId == id)
+         var transactions = await _dbSet.Where(d => d.UserAccountId == id)
         .Select(Dt => new TransactionDto
         {
             Date = Dt.Date,
@@ -30,7 +30,4 @@ public class TransactionRepository: Repository<Transaction>, ITransactionReposit
         return transactions;
     }
 
-
-
-    
 }

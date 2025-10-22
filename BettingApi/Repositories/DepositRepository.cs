@@ -16,9 +16,10 @@ public class DepositRepository: Repository<Deposit>, IDepositRepository
     {
 
     }
+    
     public async Task<IEnumerable<DepositDto>> GetAllDepositByUseridAsync(int id)
     {
-        var deposits = await _dbSet.Where(d => d.UserId == id)
+        var deposits = await _dbSet.Where(d => d.UserAccountId == id)
         .Select(Dt => new DepositDto
         {
             Date = Dt.Date,

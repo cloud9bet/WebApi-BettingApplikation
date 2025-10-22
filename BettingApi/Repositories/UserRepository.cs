@@ -9,7 +9,7 @@ public interface IUserRepository : IRepository<UserAccount>
     Task SetDepositLimitByIdAsync(int id, int depositLimit);
     Task UpdateBalanceByIdAsync(int id, int amount);
     Task SetActiveStatusByIdAsync(int id, bool activeStatus);
-    Task DeleteUserById(int id);
+    Task DeleteUserByIdAsync(int id);
 }
 
 
@@ -50,7 +50,7 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
         }
     }
 
-    public async Task DeleteUserById(int id)
+    public async Task DeleteUserByIdAsync(int id)
     {
         var user = await GetByIdAsync(id);
         if (user != null)

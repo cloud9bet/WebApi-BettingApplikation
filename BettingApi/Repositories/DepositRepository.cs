@@ -5,7 +5,7 @@ using BettingApi.Dto;
 
 namespace BettingApi.Repositories;
 public interface IDepositRepository:IRepository<Deposit>{
-Task<IEnumerable<DepositDto>> GetAllDepositByUseridAsync(int id);
+Task<IEnumerable<DepositDto>> GetAllDepositByUserIdAsync(int id);
 
 }
 
@@ -17,7 +17,7 @@ public class DepositRepository: Repository<Deposit>, IDepositRepository
 
     }
     
-    public async Task<IEnumerable<DepositDto>> GetAllDepositByUseridAsync(int id)
+    public async Task<IEnumerable<DepositDto>> GetAllDepositByUserIdAsync(int id)
     {
         var deposits = await _dbSet.Where(d => d.UserAccountId == id)
         .Select(Dt => new DepositDto

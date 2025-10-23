@@ -4,7 +4,7 @@ namespace BettingApi.Models
     public class Transaction
     {
         public int TransactionId { get; set; }
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public int Amount { get; set; }
         public string GameName {get; set;}
 

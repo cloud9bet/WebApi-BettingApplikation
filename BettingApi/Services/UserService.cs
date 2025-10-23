@@ -13,7 +13,6 @@ public interface IUserService
     Task AddUserAsync(UserAccount user);
     Task<UserAccount> GetByIdAsync(int id);
 
-
 }
 
 public class UserService : IUserService
@@ -54,5 +53,6 @@ public class UserService : IUserService
         return user;
     }
 
+   
 
 }

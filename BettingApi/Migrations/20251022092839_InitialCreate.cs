@@ -80,7 +80,7 @@ namespace BettingApi.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnd = table.Column<DateOnlyOffset>(type: "DateOnlyoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
@@ -101,7 +101,7 @@ namespace BettingApi.Migrations
                     DepositId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Date = table.Column<DateOnly>(type: "DateOnly2", nullable: false),
                     UserAccountId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -121,7 +121,7 @@ namespace BettingApi.Migrations
                 {
                     TransactionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Date = table.Column<DateOnly>(type: "DateOnly2", nullable: false),
                     Amount = table.Column<int>(type: "int", nullable: false),
                     GameName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserAccountId = table.Column<int>(type: "int", nullable: false)

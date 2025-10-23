@@ -1,56 +1,85 @@
-
+using BettingApi.Models;
 using BettingApi.Dto;
 namespace BettingApi.Services;
 
 public interface IGameService
-{   
-    bool CoinResultHelper();
+{
     Task<CoinFlipResultDto> CoinFlipGamePlay(CoinFlipRequestDto dto);
 }
 
 public class GameService : IGameService
 {
     IUserService _userService;
-    GameService(IUserService userService)
+    ITransactionService _transactionService;
+    GameService(IUserService userService, ITransactionService transactionService)
     {
         _userService = userService;
+        _transactionService = transactionService;
     }
 
-    private bool CoinResultHelper()
+
+    //--------------------------------For CoinGame-------------------------------//
+    private string CoinResultHelper()
     {
-        return true;//fiks efter
+        Random rand = new Random();
+        return rand.Next(0, 2) == 0 ? "heads" : "tails";
     }
     public async Task<CoinFlipResultDto> CoinFlipGamePlay(CoinFlipRequestDto dto)
     {
         var user = await _userService.GetByIdAsync(dto.Id);
         if (user != null)
         {
+
             if (dto.BetAmount <= user.Balance)
             {
+                DateOnly dateNow = new DateOnly();
+
                 await _userService.UpdateBalanceByIdAsync(dto.Id, -dto.BetAmount);
-    
-            //spil logic med random
 
-            var result = CoinResultHelper();
+                var result = CoinResultHelper();
 
-            var resultDto = new CoinFlipResultDto
-            {
-                Won = result,
-                Payout = -dto.BetAmount
-            };
+                var resultDto = new CoinFlipResultDto
+                {
+                    Result = result,
+                    Payout = -dto.BetAmount
+                };
 
-            if (dto.Choice == result)
-            {
-                await _userService.UpdateBalanceByIdAsync(dto.Id, dto.BetAmount*2);
-                resultDto.Won = true;
-            }
 
-            resultDto.Won = false;
+                if (dto.Choice == result)
+                {
+                    await _userService.UpdateBalanceByIdAsync(dto.Id, dto.BetAmount * 2);
+                    resultDto.Payout = dto.BetAmount;
+                }
 
+                var transactions = await _transactionService.GetTransactionByGameNameAsync(dto.Id, "Coin Flip", dateNow);
+
+                if (transactions != null)
+                {
+                    foreach (var transaction in transactions)
+                    {
+                        await _transactionService.UpdateGameTransactionByIdAsync(transaction.TransactionId, dto.BetAmount);
+                    }
+                    
+                }
+                else
+                {
+                    var Transaction = new Transaction
+                    {
+                        Date = dateNow,
+                        Amount = -dto.BetAmount,
+                        GameName = "Coin Flip"
+                    };
+
+                    await _transactionService.AddTrasactionAsync(Transaction);
+                }
+
+                return resultDto;
             }
         }
-        return resultDto;
+
+        return null;
     }
 
+    //----------------------------------------------------------------------//
 
 }

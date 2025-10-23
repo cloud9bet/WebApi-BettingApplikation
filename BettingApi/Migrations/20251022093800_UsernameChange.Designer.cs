@@ -47,8 +47,8 @@ namespace BettingApi.Migrations
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateOnlyOffset?>("LockoutEnd")
+                        .HasColumnType("DateOnlyoffset");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -106,8 +106,8 @@ namespace BettingApi.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("DateOnly2");
 
                     b.Property<int>("UserAccountId")
                         .HasColumnType("int");
@@ -130,8 +130,8 @@ namespace BettingApi.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("DateOnly2");
 
                     b.Property<string>("GameName")
                         .IsRequired()

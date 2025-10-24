@@ -1,4 +1,6 @@
 using BettingApi.Models;
+using BettingApi.Dto;
+
 using Microsoft.EntityFrameworkCore;
 using BettingApi.Data;
 
@@ -10,6 +12,9 @@ public interface IUserRepository : IRepository<UserAccount>
     Task UpdateBalanceByIdAsync(int id, int amount);
     Task SetActiveStatusByIdAsync(int id, bool activeStatus);
     Task DeleteUserByIdAsync(int id);
+    Task<IEnumerable<UserTagDto>> GetAllUserTagsAsync();
+    Task<IEnumerable<UserInfoDto>> GetAllUserInfoAsync();
+
 }
 
 
@@ -59,4 +64,34 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
             await SaveChangesAsync();
         }
     }
+
+    public async Task<IEnumerable<UserTagDto>> GetAllUserTagsAsync()
+    {
+        var users = await _dbSet
+       .Select(UT => new UserTagDto
+       {
+           UserAccountId = UT.UserAccountId,
+           UserName = UT.UserName
+       }).ToListAsync();
+
+        return users;
+    }
+
+    public async Task<IEnumerable<UserInfoDto>> GetAllUserInfoAsync()
+    {
+        var users = await _dbSet
+       .Select(UI => new UserInfoDto
+       {
+           UserAccountId = UI.UserAccountId,
+           UserName = UI.UserName,
+           Balance = UI.Balance,
+           DepositLimit = UI.DepositLimit,
+           ActiveStatus = UI.ActiveStatus
+
+       }).ToListAsync();
+
+        return users;
+    }
+
+
 }

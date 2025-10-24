@@ -31,7 +31,7 @@ namespace BettingApi.Migrations
                 {
                     UserAccountId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Balance = table.Column<int>(type: "int", nullable: false),
                     DepositLimit = table.Column<int>(type: "int", nullable: true),
@@ -80,7 +80,7 @@ namespace BettingApi.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateOnlyOffset>(type: "DateOnlyoffset", nullable: true),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
@@ -101,7 +101,7 @@ namespace BettingApi.Migrations
                     DepositId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateOnly>(type: "DateOnly2", nullable: false),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false),
                     UserAccountId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -121,7 +121,7 @@ namespace BettingApi.Migrations
                 {
                     TransactionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateOnly>(type: "DateOnly2", nullable: false),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false),
                     Amount = table.Column<int>(type: "int", nullable: false),
                     GameName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserAccountId = table.Column<int>(type: "int", nullable: false)
@@ -222,6 +222,27 @@ namespace BettingApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    RefreshTokenId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ApiUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.RefreshTokenId);
+                    table.ForeignKey(
+                        name: "FK_RefreshTokens_AspNetUsers_ApiUserId",
+                        column: x => x.ApiUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -272,6 +293,12 @@ namespace BettingApi.Migrations
                 column: "UserAccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_ApiUserId",
+                table: "RefreshTokens",
+                column: "ApiUserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transactions_UserAccountId",
                 table: "Transactions",
                 column: "UserAccountId");
@@ -297,6 +324,9 @@ namespace BettingApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Deposits");
+
+            migrationBuilder.DropTable(
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "Transactions");

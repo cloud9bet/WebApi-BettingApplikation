@@ -44,8 +44,8 @@ namespace BettingApi.Migrations
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<DateOnlyOffset?>("LockoutEnd")
-                        .HasColumnType("DateOnlyoffset");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -104,7 +104,7 @@ namespace BettingApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateOnly>("Date")
-                        .HasColumnType("DateOnly2");
+                        .HasColumnType("date");
 
                     b.Property<int>("UserAccountId")
                         .HasColumnType("int");
@@ -114,6 +114,33 @@ namespace BettingApi.Migrations
                     b.HasIndex("UserAccountId");
 
                     b.ToTable("Deposits");
+                });
+
+            modelBuilder.Entity("BettingApi.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("RefreshTokenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RefreshTokenId"));
+
+                    b.Property<string>("ApiUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RefreshTokenId");
+
+                    b.HasIndex("ApiUserId")
+                        .IsUnique();
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("BettingApi.Models.Transaction", b =>
@@ -128,7 +155,7 @@ namespace BettingApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateOnly>("Date")
-                        .HasColumnType("DateOnly2");
+                        .HasColumnType("date");
 
                     b.Property<string>("GameName")
                         .IsRequired()
@@ -319,12 +346,23 @@ namespace BettingApi.Migrations
             modelBuilder.Entity("BettingApi.Models.Deposit", b =>
                 {
                     b.HasOne("BettingApi.Models.UserAccount", "UserAccount")
-                        .WithMany()
+                        .WithMany("Deposits")
                         .HasForeignKey("UserAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("UserAccount");
+                });
+
+            modelBuilder.Entity("BettingApi.Models.RefreshToken", b =>
+                {
+                    b.HasOne("BettingApi.Models.ApiUser", "ApiUser")
+                        .WithOne("RefreshToken")
+                        .HasForeignKey("BettingApi.Models.RefreshToken", "ApiUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApiUser");
                 });
 
             modelBuilder.Entity("BettingApi.Models.Transaction", b =>
@@ -389,8 +427,15 @@ namespace BettingApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("BettingApi.Models.ApiUser", b =>
+                {
+                    b.Navigation("RefreshToken");
+                });
+
             modelBuilder.Entity("BettingApi.Models.UserAccount", b =>
                 {
+                    b.Navigation("Deposits");
+
                     b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618

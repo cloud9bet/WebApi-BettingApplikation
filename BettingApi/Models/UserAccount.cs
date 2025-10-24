@@ -7,9 +7,11 @@ namespace BettingApi.Models
         public string Password { get; set; }
         public int Balance { get; set; } = 0;
         public int? DepositLimit { get; set; }
-        public bool ActiveStatus {get;set;} = true;
+        public bool ActiveStatus { get; set; } = true;
 
         // 1:N relation til Transaction
         public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+        public ICollection<Deposit> Deposits { get; set; } = new List<Deposit>();
+
     }
 }

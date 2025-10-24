@@ -17,24 +17,24 @@ public interface IDepositService
 
 public class DepositService : IDepositService
 {
-    private readonly IDepositRepository _repository;
-    private readonly IUserService _userService;
-    DepositService(IDepositRepository repository, IUserService userService)
+    private readonly IDepositRepository _depositrepository;
+    private readonly IUserRepository _userRepository;
+    DepositService(IDepositRepository depositrepository, IUserRepository userRepository)
     {
-        _repository = repository;
-        _userService = userService;
+        _depositrepository = depositrepository;
+        _userRepository = userRepository;
     }
 
     public async Task<IEnumerable<DepositResultDto>> GetAllDepositByUserIdAsync(int id)
     {
-        var deposits = await _repository.GetAllDepositByUserIdAsync(id); 
+        var deposits = await _depositrepository.GetAllDepositByUserIdAsync(id); 
 
         return deposits;
     }
     
     public async Task AddDepositAsync(DepositRequestDto dto)
     {
-        var user = await _userService.GetByIdAsync(dto.Id);
+        var user = await _userRepository.GetByIdAsync(dto.Id);
         if (user != null)
         {
             if(user.DepositLimit >= dto.Amount || user.DepositLimit == null)
@@ -45,15 +45,15 @@ public class DepositService : IDepositService
                     Date = new DateOnly(),
                     UserAccountId = dto.Id
                 };
-                await _repository.AddAsync(deposit);
-                await _repository.SaveChangesAsync();
+                await _depositrepository.AddAsync(deposit);
+                await _depositrepository.SaveChangesAsync();
             }
         }
     }
 
     public async Task<IEnumerable<DepositResultDto>> GetAllDepositAsync()
     {
-        var deposits = await _repository.GetAllDepositForAllUsersAsync();
+        var deposits = await _depositrepository.GetAllDepositForAllUsersAsync();
         return deposits; 
     }
 

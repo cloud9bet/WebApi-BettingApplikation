@@ -1,5 +1,7 @@
 using BettingApi.Models;
 using BettingApi.Dto;
+using BettingApi.Repositories;
+
 namespace BettingApi.Services;
 
 public interface IGameService
@@ -9,12 +11,12 @@ public interface IGameService
 
 public class GameService : IGameService
 {
-    IUserService _userService;
-    ITransactionService _transactionService;
-    GameService(IUserService userService, ITransactionService transactionService)
+    IUserRepository _userRepository;
+    ITransactionRepository _transactionRepository;
+    GameService(ITransactionRepository transactionRepository, IUserRepository userRepository)
     {
-        _userService = userService;
-        _transactionService = transactionService;
+        _userRepository = userRepository;
+        _transactionRepository = transactionRepository;
     }
 
 
@@ -26,7 +28,7 @@ public class GameService : IGameService
     }
     public async Task<CoinFlipResultDto> CoinFlipGamePlay(CoinFlipRequestDto dto)
     {
-        var user = await _userService.GetByIdAsync(dto.Id);
+        var user = await _userRepository.GetByIdAsync(dto.Id);
         if (user != null)
         {
 
@@ -34,7 +36,7 @@ public class GameService : IGameService
             {
                 DateOnly dateNow = new DateOnly();
 
-                await _userService.UpdateBalanceByIdAsync(dto.Id, -dto.BetAmount);
+                await _userRepository.UpdateBalanceByIdAsync(dto.Id, -dto.BetAmount);
 
                 var result = CoinResultHelper();
 
@@ -47,17 +49,17 @@ public class GameService : IGameService
 
                 if (dto.Choice == result)
                 {
-                    await _userService.UpdateBalanceByIdAsync(dto.Id, dto.BetAmount * 2);
-                    resultDto.Payout = dto.BetAmount;
+                    await _userRepository.UpdateBalanceByIdAsync(dto.Id, dto.BetAmount * 2);
+                    resultDto.Payout += dto.BetAmount*2;
                 }
 
-                var transactions = await _transactionService.GetTransactionByGameNameAsync(dto.Id, "Coin Flip", dateNow);
+                var transactions = await _transactionRepository.GetTransactionByGameNameAsync(dto.Id, "Coin Flip", dateNow);
 
                 if (transactions != null)
                 {
                     foreach (var transaction in transactions)
                     {
-                        await _transactionService.UpdateGameTransactionByIdAsync(transaction.TransactionId, dto.BetAmount);
+                        await _transactionRepository.UpdateGameTransactionByIdAsync(transaction.TransactionId, resultDto.Payout);
                     }
                     
                 }
@@ -65,12 +67,13 @@ public class GameService : IGameService
                 {
                     var Transaction = new Transaction
                     {
+                        UserAccountId = dto.Id,
                         Date = dateNow,
-                        Amount = -dto.BetAmount,
+                        Amount = resultDto.Payout,
                         GameName = "Coin Flip"
                     };
 
-                    await _transactionService.AddTrasactionAsync(Transaction);
+                    await _transactionRepository.AddAsync(Transaction);
                 }
 
                 return resultDto;

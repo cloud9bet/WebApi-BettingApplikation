@@ -1,11 +1,15 @@
 using BettingApi.Models;
 using BettingApi.Dto;
+using BettingApi.Repositories;
+
+
 
 //Til Auth
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 
 namespace BettingApi.Services;
@@ -22,14 +26,17 @@ public interface IAuthService
 public class AuthService : IAuthService
 {
 
-    private readonly IUserService _userService;
+    private readonly IUserRepository _userRepository;
     private readonly IConfiguration _configuration;
     private readonly UserManager<ApiUser> _userManager;
-    AuthService(IUserService userService, IConfiguration configuration, UserManager<ApiUser> userManager)
+    private readonly IRefreshTokenRepository _refreshTokenRepository;
+    AuthService(IUserRepository userRepository, IConfiguration configuration, UserManager<ApiUser> userManager, 
+    IRefreshTokenRepository refreshTokenRepository)
     {
-        _userService = userService;
+        _userRepository = userRepository;
         _configuration = configuration;
         _userManager = userManager;
+        _refreshTokenRepository = refreshTokenRepository;
     }
 
     public async Task<string> getJWT(ApiUser user)
@@ -63,7 +70,7 @@ public class AuthService : IAuthService
             ActiveStatus = true
         };
 
-        await _userService.AddUserAsync(UserAccount);
+        await _userRepository.AddAsync(UserAccount);
 
         var newUser = new ApiUser
         {
@@ -80,7 +87,7 @@ public class AuthService : IAuthService
 
     public async Task<LoginResultDto> Login(LoginDto dto)
     {
-        var token = "";
+        var Token = "";
 
         var Result = new LoginResultDto();
 
@@ -88,19 +95,45 @@ public class AuthService : IAuthService
         var user = await _userManager.FindByNameAsync(dto.UserName);
         if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
         {
-            token = await getJWT(user);
+            Token = await getJWT(user);
+            
+            var refresh = new RefreshToken
+            {
+                Token = CreateRefreshToken(),
+                ExpirationDate = DateTime.UtcNow.AddMinutes(5),
+                ApiUserId = user.Id,
+                
 
-            Result.JWTtoken = token;
-            Result.RefreshToken = "";
+            };
+
+            _refreshTokenRepository.AddAsync(refresh);
+            _refreshTokenRepository.SaveChangesAsync();
+
+            Result.JWTtoken = Token;
+            Result.RefreshToken = refresh.Token ;
         }
         return Result;
     }
 
     
 
-    // string RefreshJWTToken(string refreshToken)
-    // {
-    // }
+    public async Task RefreshJWTToken(string refreshToken)
+    {
+        var token = await _refreshTokenRepository.GetRefreshTokenByValue(refreshToken);
+        
+        if(token != null)
+        {
+            await _refreshTokenRepository.UpdateRefreshToken(token.RefreshId,DateTime.UtcNow.AddMinutes(5),CreateRefreshToken());
+
+        }
+        
+        
+    }
+
+    public string CreateRefreshToken()
+    {
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+    }
 
 }
 

@@ -2,4 +2,4 @@ USE BetAppDB;
 GO
 
 SELECT * FROM UserAccount;
-
+SELECT * FROM KIRIHIRI;

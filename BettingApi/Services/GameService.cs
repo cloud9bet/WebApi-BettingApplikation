@@ -6,7 +6,7 @@ namespace BettingApi.Services;
 
 public interface IGameService
 {
-    Task<CoinFlipResultDto> CoinFlipGamePlay(CoinFlipRequestDto dto);
+    Task<CoinFlipResultDto> CoinFlipGamePlay(CoinFlipRequestDto dto, int id);
 }
 
 public class GameService : IGameService
@@ -26,9 +26,9 @@ public class GameService : IGameService
         Random rand = new Random();
         return rand.Next(0, 2) == 0 ? "heads" : "tails";
     }
-    public async Task<CoinFlipResultDto> CoinFlipGamePlay(CoinFlipRequestDto dto)
+    public async Task<CoinFlipResultDto> CoinFlipGamePlay(CoinFlipRequestDto dto, int id)
     {
-        var user = await _userRepository.GetByIdAsync(dto.Id);
+        var user = await _userRepository.GetByIdAsync(id);
         if (user != null)
         {
 
@@ -36,7 +36,7 @@ public class GameService : IGameService
             {
                 DateOnly dateNow = new DateOnly();
 
-                await _userRepository.UpdateBalanceByIdAsync(dto.Id, -dto.BetAmount);
+                await _userRepository.UpdateBalanceByIdAsync(id, -dto.BetAmount);
 
                 var result = CoinResultHelper();
 
@@ -49,11 +49,11 @@ public class GameService : IGameService
 
                 if (dto.Choice == result)
                 {
-                    await _userRepository.UpdateBalanceByIdAsync(dto.Id, dto.BetAmount * 2);
+                    await _userRepository.UpdateBalanceByIdAsync(id, dto.BetAmount * 2);
                     resultDto.Payout += dto.BetAmount*2;
                 }
 
-                var transactions = await _transactionRepository.GetTransactionByGameNameAsync(dto.Id, "Coin Flip", dateNow);
+                var transactions = await _transactionRepository.GetTransactionByGameNameAsync(id, "Coin Flip", dateNow);
 
                 if (transactions != null)
                 {
@@ -67,7 +67,7 @@ public class GameService : IGameService
                 {
                     var Transaction = new Transaction
                     {
-                        UserAccountId = dto.Id,
+                        UserAccountId = id,
                         Date = dateNow,
                         Amount = resultDto.Payout,
                         GameName = "Coin Flip"

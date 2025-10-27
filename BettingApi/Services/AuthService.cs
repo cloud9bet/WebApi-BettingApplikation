@@ -47,6 +47,7 @@ public class AuthService : IAuthService
 
         var claims = new List<Claim>();
         claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
         claims.AddRange((await _userManager.GetRolesAsync(user))
         .Select(r => new Claim(ClaimTypes.Role, r)));
 

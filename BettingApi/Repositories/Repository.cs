@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using BettingApi.Data;
+using Microsoft.EntityFrameworkCore.Storage; // Bruges til Rollback
+
 
 namespace BettingApi.Repositories;
 
@@ -11,6 +13,8 @@ public interface IRepository<T> where T : class
     void Update(T entity);
     void Delete(T entity);
     Task SaveChangesAsync();
+    Task<IDbContextTransaction> BeginTransactionAsync();
+
 
 }
 
@@ -30,5 +34,7 @@ public class Repository<T> : IRepository<T> where T : class
     public void Update(T entity) => _dbSet.Update(entity);
     public void Delete(T entity) => _dbSet.Remove(entity);
     public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+    public async Task<IDbContextTransaction> BeginTransactionAsync() => await _context.Database.BeginTransactionAsync();
+    
 
 }

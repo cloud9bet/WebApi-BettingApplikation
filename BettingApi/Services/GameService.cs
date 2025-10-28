@@ -1,6 +1,7 @@
 using BettingApi.Models;
 using BettingApi.Dto;
 using BettingApi.Repositories;
+using System.Linq.Expressions;
 
 namespace BettingApi.Services;
 
@@ -13,7 +14,7 @@ public class GameService : IGameService
 {
     IUserRepository _userRepository;
     ITransactionRepository _transactionRepository;
-    GameService(ITransactionRepository transactionRepository, IUserRepository userRepository)
+    public GameService(ITransactionRepository transactionRepository, IUserRepository userRepository)
     {
         _userRepository = userRepository;
         _transactionRepository = transactionRepository;
@@ -26,62 +27,78 @@ public class GameService : IGameService
         Random rand = new Random();
         return rand.Next(0, 2) == 0 ? "heads" : "tails";
     }
+
     public async Task<CoinFlipResultDto> CoinFlipGamePlay(CoinFlipRequestDto dto, int id)
     {
-        var user = await _userRepository.GetByIdAsync(id);
-        if (user != null)
+        using var dbOperation = await _userRepository.BeginTransactionAsync();
+
+        try
         {
-
-            if (dto.BetAmount <= user.Balance)
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user != null && user.ActiveStatus)
             {
-                DateOnly dateNow = new DateOnly();
 
-                await _userRepository.UpdateBalanceByIdAsync(id, -dto.BetAmount);
-
-                var result = CoinResultHelper();
-
-                var resultDto = new CoinFlipResultDto
+                if (dto.BetAmount <= user.Balance)
                 {
-                    Result = result,
-                    Payout = -dto.BetAmount
-                };
+                    DateOnly dateNow =  DateOnly.FromDateTime(DateTime.UtcNow);
 
+                    await _userRepository.UpdateBalanceByIdAsync(id, -dto.BetAmount);
 
-                if (dto.Choice == result)
-                {
-                    await _userRepository.UpdateBalanceByIdAsync(id, dto.BetAmount * 2);
-                    resultDto.Payout += dto.BetAmount*2;
-                }
+                    var result = CoinResultHelper();
 
-                var transactions = await _transactionRepository.GetTransactionByGameNameAsync(id, "Coin Flip", dateNow);
-
-                if (transactions != null)
-                {
-                    foreach (var transaction in transactions)
+                    var resultDto = new CoinFlipResultDto
                     {
-                        await _transactionRepository.UpdateGameTransactionByIdAsync(transaction.TransactionId, resultDto.Payout);
-                    }
-                    
-                }
-                else
-                {
-                    var Transaction = new Transaction
-                    {
-                        UserAccountId = id,
-                        Date = dateNow,
-                        Amount = resultDto.Payout,
-                        GameName = "Coin Flip"
+                        Result = result,
+                        Payout = -dto.BetAmount
                     };
 
-                    await _transactionRepository.AddAsync(Transaction);
+
+                    if (dto.Choice == result)
+                    {
+                        await _userRepository.UpdateBalanceByIdAsync(id, dto.BetAmount * 2);
+                        resultDto.Payout += dto.BetAmount * 2;
+                    }
+
+                    var transactions = await _transactionRepository.GetTransactionByGameNameAsync(id, "Coin Flip", dateNow);
+
+                    if (transactions.Any())
+                    {
+                        foreach (var transaction in transactions)
+                        {
+                            await _transactionRepository.UpdateGameTransactionByIdAsync(transaction.TransactionId, resultDto.Payout);
+                        }
+
+                    }
+                    else
+                    {
+                        var Transaction = new Transaction
+                        {
+                            UserAccountId = id,
+                            Date = dateNow,
+                            Amount = resultDto.Payout,
+                            GameName = "Coin Flip"
+                        };
+
+                        await _transactionRepository.AddAsync(Transaction);
+                        await _transactionRepository.SaveChangesAsync();
+                    }
+
+                    await dbOperation.CommitAsync();
+                    return resultDto;
                 }
 
-                return resultDto;
             }
-        }
 
-        return null;
+             throw new Exception("User not found or not active from service");
+        }
+        catch (Exception ex)
+        {
+            // Rollback hvis noget fejler
+            await dbOperation.RollbackAsync();
+            throw new Exception($"Coin flip transaction failed: {ex.Message}");
+        }
     }
+
 
     //----------------------------------------------------------------------//
 

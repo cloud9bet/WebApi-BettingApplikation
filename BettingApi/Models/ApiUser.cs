@@ -6,7 +6,7 @@ namespace BettingApi.Models
     {
         public int? UserAccountId { get; set; }
         public UserAccount? UserAccount { get; set; }
-
+        
         public RefreshToken? RefreshToken { get; set; }
     }
 

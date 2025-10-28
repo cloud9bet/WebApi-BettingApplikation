@@ -4,7 +4,8 @@ using BettingApi.Data;
 using BettingApi.Dto;
 
 namespace BettingApi.Repositories;
-public interface ITransactionRepository:IRepository<Transaction>
+
+public interface ITransactionRepository : IRepository<Transaction>
 {
     Task<IEnumerable<TransactionDto>> GetAllTransactionByUserIdAsync(int id);
     Task<IEnumerable<Transaction>> GetTransactionByGameNameAsync(int id, string GameName, DateOnly date);
@@ -13,7 +14,7 @@ public interface ITransactionRepository:IRepository<Transaction>
 
 }
 
-public class TransactionRepository: Repository<Transaction>, ITransactionRepository
+public class TransactionRepository : Repository<Transaction>, ITransactionRepository
 {
     public TransactionRepository(BetAppDbContext context) : base(context)
     {
@@ -25,6 +26,7 @@ public class TransactionRepository: Repository<Transaction>, ITransactionReposit
         var transactions = await _dbSet.Where(t => t.UserAccountId == id)
        .Select(TI => new TransactionDto
        {
+           TransactionId = TI.TransactionId,
            Date = TI.Date,
            Amount = TI.Amount,
            GameName = TI.GameName
@@ -33,7 +35,7 @@ public class TransactionRepository: Repository<Transaction>, ITransactionReposit
 
         return transactions;
     }
-    
+
     public async Task<IEnumerable<Transaction>> GetTransactionByGameNameAsync(int id, string GameName, DateOnly date)
     {
         var transactions = await _dbSet.Where(t => t.GameName == GameName && t.UserAccountId == id && t.Date == date).ToListAsync();
@@ -49,11 +51,13 @@ public class TransactionRepository: Repository<Transaction>, ITransactionReposit
             await SaveChangesAsync();
         }
     }
+
     public async Task<IEnumerable<TransactionDto>> GetAllTransactionForAllUserAsync()
     {
         var transactions = await _dbSet
        .Select(TI => new TransactionDto
        {
+           TransactionId = TI.TransactionId,
            Date = TI.Date,
            Amount = TI.Amount,
            GameName = TI.GameName
@@ -62,6 +66,6 @@ public class TransactionRepository: Repository<Transaction>, ITransactionReposit
 
         return transactions;
     }
-    
+
 
 }

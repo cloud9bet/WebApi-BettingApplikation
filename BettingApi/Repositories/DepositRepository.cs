@@ -22,6 +22,7 @@ public class DepositRepository: Repository<Deposit>, IDepositRepository
         var deposits = await _dbSet.Where(d => d.UserAccountId == id)
         .Select(Dt => new DepositResultDto
         {
+            DepositId = Dt.DepositId,
             Date = Dt.Date,
             Amount = Dt.Amount
             
@@ -35,6 +36,7 @@ public class DepositRepository: Repository<Deposit>, IDepositRepository
         var deposits = await _dbSet
         .Select(Dt => new DepositResultDto
         {
+            DepositId = Dt.DepositId,
             Date = Dt.Date,
             Amount = Dt.Amount
             

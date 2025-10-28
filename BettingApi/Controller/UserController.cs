@@ -5,6 +5,7 @@ using BettingApi.Dto;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using BettingApi.Services;
 
 namespace BettingApi.Controllers
 {
@@ -13,21 +14,39 @@ namespace BettingApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-        private readonly IDepositRepository _depositRepository;
+        private readonly IDepositService _depositService;
         private readonly UserManager<ApiUser> _userManager;
         private readonly ITransactionRepository _transactionRepository;
 
-        public UserController(IUserRepository userRepository, IDepositRepository depositRepository, 
+        public UserController(IUserRepository userRepository, IDepositService depositService, 
         ITransactionRepository transactionRepository, UserManager<ApiUser> userManager)
         {
             _userRepository = userRepository;
-            _depositRepository = depositRepository;
+            _depositService = depositService;
             _userManager = userManager;
             _transactionRepository = transactionRepository;
         }
 
+
         [Authorize(Roles = "User")]
-        [HttpPut]
+        [HttpPost("deposit")]
+        public async Task<ActionResult> Deposit(int amount)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user != null)
+            {
+                await _depositService.AddDepositAsync(amount, user.UserAccountId ?? 0);
+                return Ok();
+            }
+
+            return NotFound();
+
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPut("depositlimit")]
         public async Task<ActionResult> SetUserDepositLimit(int amount)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -44,14 +63,21 @@ namespace BettingApi.Controllers
         }
 
         [Authorize(Roles = "User")]
-        [HttpDelete]
-        public async Task<ActionResult> DeleteUser(int amount)
+        [HttpDelete("account")]
+        public async Task<ActionResult> DeleteUser()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
             if (user != null)
             {
-                await _userRepository.DeleteUserByIdAsync(user.UserAccountId ?? 0);
+              var userAccount = await _userRepository.GetByIdAsync(user.UserAccountId ?? 0);
+                userAccount.UserName ="DELETED";
+                userAccount.Balance = 0;
+                userAccount.DepositLimit = null;
+                userAccount.ActiveStatus = false;
+
+               await _userRepository.SaveChangesAsync();
+
 
                 await _userManager.DeleteAsync(user);
 
@@ -72,12 +98,12 @@ namespace BettingApi.Controllers
 
             if (user != null)
             {
-                var deposit = await _depositRepository.GetAllDepositByUserIdAsync(user.UserAccountId ?? 0);
+                var deposit = await _depositService.GetAllDepositByUserIdAsync(user.UserAccountId ?? 0);
                 return Ok(deposit);
 
             }
             else
-                return NotFound($"User was not found");
+                return NotFound($"User not found");
 
         }
 
@@ -95,7 +121,7 @@ namespace BettingApi.Controllers
 
             }
             else
-                return NotFound($"User had not found");
+                return NotFound($"User not found");
 
         }
 

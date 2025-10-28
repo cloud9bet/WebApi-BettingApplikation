@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using BettingApi.Models;
 using BettingApi.Repositories;
 using BettingApi.Dto;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BettingApi.Controllers
@@ -16,31 +14,32 @@ namespace BettingApi.Controllers
         private readonly IDepositRepository _depositRepository;
         private readonly ITransactionRepository _transactionRepository;
 
-        private readonly UserManager<ApiUser> _userManager;
 
-        public AdminController(IUserRepository userRepository, IDepositRepository depositRepository, UserManager<ApiUser> userManager)
+
+        public AdminController(IUserRepository userRepository, IDepositRepository depositRepository, ITransactionRepository transactionRepository)
         {
             _userRepository = userRepository;
             _depositRepository = depositRepository;
-            _userManager = userManager;
+            _transactionRepository = transactionRepository;
+
         }
 
-        [Authorize(Roles = "User")]
-        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        [HttpPut("/[controller]/activeStatus")]
         public async Task<ActionResult> SetUserActiveState(int id, bool status)
         {
             var user = await _userRepository.GetByIdAsync(id);
-                
-                await _userRepository.SetActiveStatusByIdAsync(id, status);
-                return Ok();
-            
+
+            await _userRepository.SetActiveStatusByIdAsync(id, status);
+            return Ok();
+
 
             // return NotFound();
 
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("/user")]
+        [HttpGet("/[controller]/user")]
         public async Task<ActionResult<IEnumerable<UserInfoDto>>> GetAllUserInfoAsync()
         {
             var users = await _userRepository.GetAllUserInfoAsync();
@@ -57,12 +56,12 @@ namespace BettingApi.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("/deposit")]
+        [HttpGet("/[controller]/deposit")]
         public async Task<ActionResult<IEnumerable<DepositResultDto>>> GetAllUserDepositAsync()
         {
             var deposit = await _depositRepository.GetAllDepositForAllUsersAsync();
 
-            if (deposit != null)
+            if (deposit.Any())
             {
                 {
                     return Ok(deposit);
@@ -74,12 +73,29 @@ namespace BettingApi.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("/transaction")]
-        public async Task<ActionResult<IEnumerable<DepositResultDto>>> GetAllUserTransactionAsync()
+        [HttpGet("/[controller]/transaction")]
+        public async Task<ActionResult<IEnumerable<TransactionDto>>> GetAllUserTransactionAsync()
         {
             var transaction = await _transactionRepository.GetAllTransactionForAllUserAsync();
 
-            if (transaction != null)
+            if (transaction.Any())
+            {
+                {
+                    return Ok(transaction);
+                }
+            }
+            else
+                return NotFound($"No transaction was found");
+
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("/[controller]/transaction/{id}")]
+        public async Task<ActionResult<IEnumerable<TransactionDto>>> GetUserTransactionByIdAsync(int id)
+        {
+            var transaction = await _transactionRepository.GetAllTransactionByUserIdAsync(id);
+
+            if (transaction.Any())
             {
                 {
                     return Ok(transaction);
@@ -91,6 +107,25 @@ namespace BettingApi.Controllers
         }
 
         //mangler de to metoder for at hente deposit og transactioner for et id
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("/[controller]/deposit/{id}")]
+        public async Task<ActionResult<IEnumerable<DepositResultDto>>> GetUserDepositByIdAsync(int id)
+        {
+            var deposit = await _depositRepository.GetAllDepositByUserIdAsync(id);
+
+            if (deposit.Any())
+            {
+                {
+                    return Ok(deposit);
+                }
+            }
+            else
+                return NotFound($"No transaction was found");
+
+        }
+    
     }
 }
 

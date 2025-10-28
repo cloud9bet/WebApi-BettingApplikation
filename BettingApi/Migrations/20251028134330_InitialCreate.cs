@@ -32,7 +32,6 @@ namespace BettingApi.Migrations
                     UserAccountId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Balance = table.Column<int>(type: "int", nullable: false),
                     DepositLimit = table.Column<int>(type: "int", nullable: true),
                     ActiveStatus = table.Column<bool>(type: "bit", nullable: false)
@@ -278,7 +277,9 @@ namespace BettingApi.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_UserAccountId",
                 table: "AspNetUsers",
-                column: "UserAccountId");
+                column: "UserAccountId",
+                unique: true,
+                filter: "[UserAccountId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

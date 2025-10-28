@@ -1,9 +1,7 @@
 using BettingApi.Models;
 using BettingApi.Dto;
-
-using Microsoft.EntityFrameworkCore;
 using BettingApi.Data;
-
+using Microsoft.EntityFrameworkCore;
 namespace BettingApi.Repositories;
 
 public interface IUserRepository : IRepository<UserAccount>
@@ -14,6 +12,7 @@ public interface IUserRepository : IRepository<UserAccount>
     Task DeleteUserByIdAsync(int id);
     Task<IEnumerable<UserTagDto>> GetAllUserTagsAsync();
     Task<IEnumerable<UserInfoDto>> GetAllUserInfoAsync();
+
 
 }
 

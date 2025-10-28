@@ -31,7 +31,7 @@ public class AuthService : IAuthService
     private readonly IConfiguration _configuration;
     private readonly UserManager<ApiUser> _userManager;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
-    AuthService(IUserRepository userRepository, IConfiguration configuration, UserManager<ApiUser> userManager,
+    public AuthService(IUserRepository userRepository, IConfiguration configuration, UserManager<ApiUser> userManager,
     IRefreshTokenRepository refreshTokenRepository)
     {
         _userRepository = userRepository;
@@ -55,7 +55,7 @@ public class AuthService : IAuthService
         issuer: _configuration["JWT:Issuer"],
         audience: _configuration["JWT:Audience"],
         claims: claims,
-        expires: DateTime.Now.AddSeconds(300),
+        expires: DateTime.Now.AddSeconds(60),
         signingCredentials: signingCredentials);
 
         var jwtString = new JwtSecurityTokenHandler()
@@ -81,6 +81,9 @@ public class AuthService : IAuthService
         };
 
         var result = await _userManager.CreateAsync(newUser, dto.Password);
+
+        UserAccount.ApiUser = newUser;
+
         if (result.Succeeded)
         {
             await _userManager.AddToRoleAsync(newUser, "User");
@@ -97,12 +100,21 @@ public class AuthService : IAuthService
         var user = await _userManager.FindByNameAsync(dto.UserName);
         if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
         {
+
+            var existingToken = await _refreshTokenRepository.GetRefreshTokenByUserId(user.Id);
+            if (existingToken != null)
+            {
+                _refreshTokenRepository.Delete(existingToken);
+                await _refreshTokenRepository.SaveChangesAsync();
+      
+            }
+
             Token = await getJWT(user);
 
             var refresh = new RefreshToken
             {
                 Token = CreateRefreshToken(),
-                ExpirationDate = DateTime.UtcNow.AddMinutes(5),
+                ExpirationDate = DateTime.UtcNow.AddMinutes(2),
                 ApiUserId = user.Id,
 
             };
@@ -121,11 +133,11 @@ public class AuthService : IAuthService
         var token = await _refreshTokenRepository.GetRefreshTokenByValue(refreshToken);
         if (token != null)
         {
-             _refreshTokenRepository.Delete(token);
+            _refreshTokenRepository.Delete(token);
             await _refreshTokenRepository.SaveChangesAsync();
         }
     }
-    
+
 
     public async Task<TokenDto> RefreshJWTToken(string refreshToken)
     {
@@ -133,9 +145,9 @@ public class AuthService : IAuthService
         var result = new TokenDto();
 
 
-        if (token != null || token.ExpirationDate <= DateTime.Now)
+        if (token != null && token.ExpirationDate > DateTime.Now)
         {
-            await _refreshTokenRepository.UpdateRefreshToken(token.RefreshTokenId, DateTime.UtcNow.AddMinutes(5), CreateRefreshToken());
+            await _refreshTokenRepository.UpdateRefreshToken(token.RefreshTokenId, DateTime.UtcNow.AddMinutes(2), CreateRefreshToken());
             var user = await _userManager.FindByIdAsync(token.ApiUserId);
             var jwtToken = await getJWT(user);
 

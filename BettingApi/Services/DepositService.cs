@@ -12,14 +12,14 @@ public interface IDepositService
 
     Task<IEnumerable<DepositResultDto>> GetAllDepositAsync();
 
-    Task AddDepositAsync(DepositRequestDto dto);
+    Task AddDepositAsync(int amount, int id);
 }
 
 public class DepositService : IDepositService
 {
     private readonly IDepositRepository _depositrepository;
     private readonly IUserRepository _userRepository;
-    DepositService(IDepositRepository depositrepository, IUserRepository userRepository)
+    public DepositService(IDepositRepository depositrepository, IUserRepository userRepository)
     {
         _depositrepository = depositrepository;
         _userRepository = userRepository;
@@ -32,21 +32,26 @@ public class DepositService : IDepositService
         return deposits;
     }
     
-    public async Task AddDepositAsync(DepositRequestDto dto)
+    public async Task AddDepositAsync(int amount, int id)
     {
-        var user = await _userRepository.GetByIdAsync(dto.Id);
+        var user = await _userRepository.GetByIdAsync(id);
         if (user != null)
         {
-            if(user.DepositLimit >= dto.Amount || user.DepositLimit == null)
+            if (user.DepositLimit >= amount || user.DepositLimit == null)
             {
                 var deposit = new Deposit
                 {
-                    Amount = dto.Amount,
-                    Date = new DateOnly(),
-                    UserAccountId = dto.Id
+                    Amount = amount,
+                    Date = DateOnly.FromDateTime(DateTime.UtcNow),
+                    UserAccountId = id
                 };
                 await _depositrepository.AddAsync(deposit);
+                user.Balance += amount;
                 await _depositrepository.SaveChangesAsync();
+            }
+            else
+            {
+             throw new Exception("Amount exceeds depositLimit from service");
             }
         }
     }

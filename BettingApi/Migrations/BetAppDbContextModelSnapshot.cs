@@ -87,7 +87,9 @@ namespace BettingApi.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("UserAccountId");
+                    b.HasIndex("UserAccountId")
+                        .IsUnique()
+                        .HasFilter("[UserAccountId] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -187,10 +189,6 @@ namespace BettingApi.Migrations
 
                     b.Property<int?>("DepositLimit")
                         .HasColumnType("int");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -337,8 +335,8 @@ namespace BettingApi.Migrations
             modelBuilder.Entity("BettingApi.Models.ApiUser", b =>
                 {
                     b.HasOne("BettingApi.Models.UserAccount", "UserAccount")
-                        .WithMany()
-                        .HasForeignKey("UserAccountId");
+                        .WithOne("ApiUser")
+                        .HasForeignKey("BettingApi.Models.ApiUser", "UserAccountId");
 
                     b.Navigation("UserAccount");
                 });
@@ -434,6 +432,8 @@ namespace BettingApi.Migrations
 
             modelBuilder.Entity("BettingApi.Models.UserAccount", b =>
                 {
+                    b.Navigation("ApiUser");
+
                     b.Navigation("Deposits");
 
                     b.Navigation("Transactions");

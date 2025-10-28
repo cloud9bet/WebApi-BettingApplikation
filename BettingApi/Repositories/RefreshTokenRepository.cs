@@ -9,6 +9,9 @@ public interface IRefreshTokenRepository:IRepository<RefreshToken>{
     Task<RefreshToken> GetRefreshTokenByValue(string token);
     Task UpdateRefreshToken(int tokenId, DateTime time, string newVal);
 
+    Task<RefreshToken> GetRefreshTokenByUserId(string userId);
+    
+
 }
 
 
@@ -37,6 +40,12 @@ public class RefreshTokenRepository: Repository<RefreshToken>, IRefreshTokenRepo
         }
     }
 
+    public async Task<RefreshToken> GetRefreshTokenByUserId(string userId)
+    {
+         var Refresh = await _dbSet.FirstOrDefaultAsync(t => t.ApiUserId == userId);
+
+        return Refresh;
+    }
     
     
 }

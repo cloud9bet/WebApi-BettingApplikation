@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
+using BettingApi.Services;
+using BettingApi.Repositories;
+
+
 
 
 // using BettingApi.Repositories;
@@ -28,6 +32,18 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<BetAppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IDepositRepository, DepositRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+
+builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IDepositService, DepositService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+
+
 
 builder.Services.AddIdentity<ApiUser, IdentityRole>(options =>
 {
@@ -64,7 +80,8 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["JWT:Audience"],
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(
-    System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"]))
+    System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])),
+    ClockSkew = TimeSpan.Zero //burde fjerne default 5 min default tillægs tid som er til få små delays osv
     };
 });
 
@@ -119,8 +136,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

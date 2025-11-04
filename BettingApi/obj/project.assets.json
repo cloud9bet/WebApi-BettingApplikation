@@ -5076,23 +5076,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\hirus\\.nuget\\packages\\": {},
+    "C:\\Users\\Molle\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\hirus\\Desktop\\Softwareteknologi\\4. semester\\Projekt\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
+      "projectUniqueName": "c:\\Users\\Molle\\Desktop\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
       "projectName": "BettingApi",
-      "projectPath": "C:\\Users\\hirus\\Desktop\\Softwareteknologi\\4. semester\\Projekt\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
-      "packagesPath": "C:\\Users\\hirus\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\hirus\\Desktop\\Softwareteknologi\\4. semester\\Projekt\\WebApi-BettingApplikation\\BettingApi\\obj\\",
+      "projectPath": "c:\\Users\\Molle\\Desktop\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
+      "packagesPath": "C:\\Users\\Molle\\.nuget\\packages\\",
+      "outputPath": "c:\\Users\\Molle\\Desktop\\WebApi-BettingApplikation\\BettingApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\hirus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Molle\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5178,7 +5178,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

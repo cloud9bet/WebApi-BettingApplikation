@@ -152,7 +152,7 @@
 //                             Payout = -bet
 //                         };
 
-//                         if(payout)
+//                         if(payout>bet)
 //                         {
 //                             await _userRepository.UpdateBalanceByIdAsync(id, payout); 
 //                             result.Payout+=payout;

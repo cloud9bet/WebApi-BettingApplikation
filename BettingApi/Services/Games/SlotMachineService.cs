@@ -138,7 +138,7 @@ public class SlotMachineService : ISlotMachineService
 
                 if(user!=null && user.ActiveStatus)
                 {
-                    if(bet<=user.Balance)
+                    if(bet<=user.Balance && bet > 0)
                     {
                         DateOnly dateNow = DateOnly.FromDateTime(DateTime.UtcNow);
                         await _userRepository.UpdateBalanceByIdAsync(id, -bet);
@@ -183,7 +183,6 @@ public class SlotMachineService : ISlotMachineService
 
                         await dbOperation.CommitAsync();
                         return result;
-
 
                     }
 

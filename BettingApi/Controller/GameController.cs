@@ -14,15 +14,16 @@ namespace BettingApi.Controllers
     [Route("[controller]")]
     public class GameController : ControllerBase
     {
-        private readonly IGameService _gameService;
+        private readonly ICoinFlipService _coinFlipService;
 
         private readonly UserManager<ApiUser> _userManager;
 
-        public GameController(IGameService gameService, UserManager<ApiUser> userManager)
+        public GameController(ICoinFlipService coinFlipService, UserManager<ApiUser> userManager)
         {
-            _gameService = gameService;
+            _coinFlipService = coinFlipService;
             _userManager = userManager;
         }
+
 
         [Authorize(Roles = "User")]
         [HttpPost("coinflip")]
@@ -35,12 +36,12 @@ namespace BettingApi.Controllers
 
                 if (user == null)
                 {
-                    return NotFound("User not found from controller");
+                    return NotFound("User not found");
                 }
 
                 var userAccountId = user.UserAccountId ?? 0;
 
-                var result = await _gameService.CoinFlipGamePlay(dto, userAccountId);
+                var result = await _coinFlipService.CoinFlipGamePlay(dto, userAccountId);
                 return Ok(result);
             }
             catch (Exception ex)

@@ -23,7 +23,7 @@ namespace BettingApi.Controllers
         {
             await _authService.Register(dto);
 
-            return Ok();
+            return StatusCode(201);
 
         }
 
@@ -33,10 +33,10 @@ namespace BettingApi.Controllers
             var result = await _authService.Login(dto);
             if (result != null)
             {
-                return Ok(result);
-            }
+                return Ok(result); 
+            }  
 
-            return NotFound("Account not found");
+            return NotFound("Invalid credentials");
         }
 
         [HttpPost("logout")]

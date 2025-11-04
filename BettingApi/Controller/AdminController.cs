@@ -30,12 +30,10 @@ namespace BettingApi.Controllers
         {
             var user = await _userRepository.GetByIdAsync(id);
 
+            if (user == null) return NotFound("User does not exist");
+
             await _userRepository.SetActiveStatusByIdAsync(id, status);
-            return Ok();
-
-
-            // return NotFound();
-
+            return NoContent();
         }
 
         [Authorize(Roles = "Admin")]
@@ -46,9 +44,7 @@ namespace BettingApi.Controllers
 
             if (users != null)
             {
-                {
-                    return Ok(users);
-                }
+                return Ok(users);
             }
             else
                 return NotFound($"Users was not found");
@@ -63,9 +59,8 @@ namespace BettingApi.Controllers
 
             if (deposit.Any())
             {
-                {
-                    return Ok(deposit);
-                }
+                return Ok(deposit);
+
             }
             else
                 return NotFound($"No deposit was found");
@@ -80,9 +75,9 @@ namespace BettingApi.Controllers
 
             if (transaction.Any())
             {
-                {
-                    return Ok(transaction);
-                }
+
+                return Ok(transaction);
+
             }
             else
                 return NotFound($"No transaction was found");
@@ -97,16 +92,14 @@ namespace BettingApi.Controllers
 
             if (transaction.Any())
             {
-                {
-                    return Ok(transaction);
-                }
+
+                return Ok(transaction);
+
             }
             else
                 return NotFound($"No transaction was found");
 
         }
-
-        //mangler de to metoder for at hente deposit og transactioner for et id
 
 
         [Authorize(Roles = "Admin")]
@@ -117,15 +110,13 @@ namespace BettingApi.Controllers
 
             if (deposit.Any())
             {
-                {
-                    return Ok(deposit);
-                }
+                return Ok(deposit);
             }
             else
                 return NotFound($"No transaction was found");
 
         }
-    
+
     }
 }
 

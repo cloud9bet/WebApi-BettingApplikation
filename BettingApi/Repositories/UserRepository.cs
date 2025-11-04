@@ -44,6 +44,7 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
             await SaveChangesAsync();
         }
     }
+    
     public async Task SetActiveStatusByIdAsync(int id, bool activeStatus)
     {
         var user = await GetByIdAsync(id);

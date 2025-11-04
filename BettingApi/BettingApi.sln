@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BettingApi", "BettingApi\BettingApi.csproj", "{FA4DC87E-BB55-0CE0-B020-B68053492AA0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BettingApi", "BettingApi.csproj", "{BC94D5F7-E33C-CE30-7699-01B1AB8DEA80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,15 +10,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FA4DC87E-BB55-0CE0-B020-B68053492AA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA4DC87E-BB55-0CE0-B020-B68053492AA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA4DC87E-BB55-0CE0-B020-B68053492AA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA4DC87E-BB55-0CE0-B020-B68053492AA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC94D5F7-E33C-CE30-7699-01B1AB8DEA80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC94D5F7-E33C-CE30-7699-01B1AB8DEA80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC94D5F7-E33C-CE30-7699-01B1AB8DEA80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC94D5F7-E33C-CE30-7699-01B1AB8DEA80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0405A055-C496-4B4E-BDEB-1840768ADDE1}
+		SolutionGuid = {3FBBC257-C2F7-46AD-87A2-BF74812857C1}
 	EndGlobalSection
 EndGlobal

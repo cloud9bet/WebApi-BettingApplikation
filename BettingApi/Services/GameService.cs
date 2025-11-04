@@ -8,6 +8,7 @@ namespace BettingApi.Services;
 public interface IGameService
 {
     Task<CoinFlipResultDto> CoinFlipGamePlay(CoinFlipRequestDto dto, int id);
+    Task<CrashGameResultDto> CrashGamePlay(CrashGameRequestDto dto, int id);
 }
 
 public class GameService : IGameService
@@ -40,7 +41,7 @@ public class GameService : IGameService
 
                 if (dto.BetAmount <= user.Balance)
                 {
-                    DateOnly dateNow =  DateOnly.FromDateTime(DateTime.UtcNow);
+                    DateOnly dateNow = DateOnly.FromDateTime(DateTime.UtcNow);
 
                     await _userRepository.UpdateBalanceByIdAsync(id, -dto.BetAmount);
 
@@ -89,7 +90,7 @@ public class GameService : IGameService
 
             }
 
-             throw new Exception("User not found or not active from service");
+            throw new Exception("User not found or not active from service");
         }
         catch (Exception ex)
         {
@@ -101,5 +102,12 @@ public class GameService : IGameService
 
 
     //----------------------------------------------------------------------//
+
+
+
+    public async Task<CrashGameResultDto> CrashGamePlay(CrashGameRequestDto dto, int id)
+    {
+        throw new NotImplementedException("Crash game is not yet implemented");
+    }
 
 }

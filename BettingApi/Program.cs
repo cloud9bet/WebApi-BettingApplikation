@@ -36,6 +36,8 @@ builder.Services.AddScoped<ICoinFlipService, CoinFlipService>();
 builder.Services.AddScoped<IDepositService, DepositService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddScoped<ICrashGameService, CrashGameService>();
+
 
 builder.Services.AddIdentity<ApiUser, IdentityRole>(options =>
 {

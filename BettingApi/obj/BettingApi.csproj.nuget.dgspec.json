@@ -1,31 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Molle\\Desktop\\PROJEKT4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj": {}
+    "C:\\Users\\ehdrm\\Desktop\\projektbackend\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Molle\\Desktop\\PROJEKT4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj": {
+    "C:\\Users\\ehdrm\\Desktop\\projektbackend\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Molle\\Desktop\\PROJEKT4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
+        "projectUniqueName": "C:\\Users\\ehdrm\\Desktop\\projektbackend\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
         "projectName": "BettingApi",
-        "projectPath": "c:\\Users\\Molle\\Desktop\\PROJEKT4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
-        "packagesPath": "C:\\Users\\Molle\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Molle\\Desktop\\PROJEKT4\\WebApi-BettingApplikation\\BettingApi\\obj\\",
+        "projectPath": "C:\\Users\\ehdrm\\Desktop\\projektbackend\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
+        "packagesPath": "C:\\Users\\ehdrm\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ehdrm\\Desktop\\projektbackend\\WebApi-BettingApplikation\\BettingApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Molle\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\ehdrm\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -103,7 +101,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

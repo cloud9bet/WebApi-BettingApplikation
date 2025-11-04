@@ -32,11 +32,11 @@ public class RefreshTokenRepository: Repository<RefreshToken>, IRefreshTokenRepo
     public async Task UpdateRefreshToken(int tokenId, DateTime time, string newVal)
     {
         var token = await GetByIdAsync(tokenId);
-        if(token != null)
+        if (token != null)
         {
-        token.Token = newVal;
-        token.ExpirationDate = time;
-        await SaveChangesAsync();
+            token.Token = newVal;
+            token.ExpirationDate = time;
+            await SaveChangesAsync();
         }
     }
 

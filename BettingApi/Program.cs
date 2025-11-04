@@ -9,10 +9,6 @@ using BettingApi.Services;
 using BettingApi.Repositories;
 
 
-
-
-// using BettingApi.Repositories;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
@@ -25,8 +21,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-
-
 builder.Services.AddControllers();
 
 
@@ -38,11 +32,9 @@ builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
-builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<ICoinFlipService, CoinFlipService>();
 builder.Services.AddScoped<IDepositService, DepositService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
-
 
 
 builder.Services.AddIdentity<ApiUser, IdentityRole>(options =>

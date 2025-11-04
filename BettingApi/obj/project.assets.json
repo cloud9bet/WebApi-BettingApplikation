@@ -5082,11 +5082,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Molle\\Desktop\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
+      "projectUniqueName": "c:\\Users\\Molle\\Desktop\\PROJEKT4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
       "projectName": "BettingApi",
-      "projectPath": "c:\\Users\\Molle\\Desktop\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
+      "projectPath": "c:\\Users\\Molle\\Desktop\\PROJEKT4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
       "packagesPath": "C:\\Users\\Molle\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Molle\\Desktop\\WebApi-BettingApplikation\\BettingApi\\obj\\",
+      "outputPath": "c:\\Users\\Molle\\Desktop\\PROJEKT4\\WebApi-BettingApplikation\\BettingApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

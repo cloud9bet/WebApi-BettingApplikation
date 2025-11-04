@@ -1,10 +1,26 @@
-CREATE DATABASE BetAppDB;
+-- CREATE DATABASE BetAppDB;
+-- GO
+
+Use BetAppDB;
 GO
+SELECT * FROM Transactions;
+
+SELECT * FROM RefreshTokens;
+SELECT * FROM Deposits;
 
 
 
-SELECT * FROM UserAccount;
-SELECT * FROM KIRIHIRI;
 
-DROP DATABASE BetAppDB;
-GO
+
+
+
+SELECT * FROM UserAccounts;
+
+
+SELECT * FROM AspNetUsers
+
+
+-- DROP DATABASE BetAppDB;
+-- GO
+
+

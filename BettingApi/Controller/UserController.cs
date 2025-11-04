@@ -38,7 +38,7 @@ namespace BettingApi.Controllers
             if (user != null)
             {
                 await _depositService.AddDepositAsync(amount, user.UserAccountId ?? 0);
-                return Ok();
+                return StatusCode(201);
             }
 
             return NotFound();
@@ -55,10 +55,10 @@ namespace BettingApi.Controllers
             if (user != null)
             {
                 await _userRepository.SetDepositLimitByIdAsync(user.UserAccountId ?? 0, amount);
-                return Ok();
+                return NoContent();
             }
 
-            return NotFound();
+            return NotFound("User not found");
 
         }
 
@@ -81,11 +81,9 @@ namespace BettingApi.Controllers
 
                 await _userManager.DeleteAsync(user);
 
-                return Ok();
+                return NoContent();
             }
-
-            return NotFound();
-
+            return NotFound("User not found");
         }
 
 

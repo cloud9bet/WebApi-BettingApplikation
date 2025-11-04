@@ -4,26 +4,38 @@ using BettingApi.Repositories;
 
 namespace BettingApi.Services;
 
-public interface ICoinFlipService
+
+public interface ICoinFlipRandommizer
 {
     string GetCoinResult();
+}
+public class CoinFlipRandommizer : ICoinFlipRandommizer
+{
+    private readonly Random _rand = new Random();
+    public string GetCoinResult() => _rand.Next(0, 2) == 0 ? "heads" : "tails";
+}
+
+
+public interface ICoinFlipService
+{
     Task<CoinFlipResultDto> CoinFlipGamePlay(CoinFlipRequestDto dto, int id);
 }
 
 
 public class CoinFlipService : ICoinFlipService
 {
-    private readonly Random _rand = new Random();
+    private readonly ICoinFlipRandommizer _coinFlipRandommizer;
     private readonly IUserRepository _userRepository;
     private readonly ITransactionRepository _transactionRepository;
 
-    public CoinFlipService(ITransactionRepository transactionRepository, IUserRepository userRepository)
+    public CoinFlipService(ITransactionRepository transactionRepository, IUserRepository userRepository, ICoinFlipRandommizer coinFlipRandommizer)
     {
+        _coinFlipRandommizer = coinFlipRandommizer;
         _userRepository = userRepository;
         _transactionRepository = transactionRepository;
     }
 
-    public string GetCoinResult() => _rand.Next(0, 2) == 0 ? "heads" : "tails";
+
 
 
     public async Task<CoinFlipResultDto> CoinFlipGamePlay(CoinFlipRequestDto dto, int id)
@@ -36,13 +48,13 @@ public class CoinFlipService : ICoinFlipService
             if (user != null && user.ActiveStatus)
             {
 
-                if (dto.BetAmount <= user.Balance)
+                if (dto.BetAmount <= user.Balance && dto.BetAmount > 0)
                 {
                     DateOnly dateNow = DateOnly.FromDateTime(DateTime.UtcNow);
 
                     await _userRepository.UpdateBalanceByIdAsync(id, -dto.BetAmount);
 
-                    var result = GetCoinResult();
+                    var result = _coinFlipRandommizer.GetCoinResult();
 
                     var resultDto = new CoinFlipResultDto
                     {
@@ -85,8 +97,13 @@ public class CoinFlipService : ICoinFlipService
                     return resultDto;
                 }
 
+                else
+                {
+                    throw new Exception("Insufficient funds");
+                }
+
             }
-            throw new Exception("User not active from service");
+            throw new Exception("User not found or inactive");
         }
         catch (Exception ex)
         {

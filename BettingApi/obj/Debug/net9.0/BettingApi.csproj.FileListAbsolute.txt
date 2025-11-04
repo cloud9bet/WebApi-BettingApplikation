@@ -9,6 +9,10 @@ C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingAppli
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Azure.Core.dll
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Azure.Identity.dll
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Humanizer.dll
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Build.Locator.dll
@@ -30,6 +34,8 @@ C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingAppli
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Extensions.Logging.dll
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
@@ -151,6 +157,7 @@ C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingAppli
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\BettingApi.csproj.CoreCompileInputs.cache
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\BettingApi.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\BettingApi.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\BettingApi.sourcelink.json
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\rjimswa.dswa.cache.json
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
@@ -165,10 +172,3 @@ C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingAppli
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\BettingApi.pdb
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\BettingApi.genruntimeconfig.cache
 C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\ref\BettingApi.dll
-C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\obj\Debug\net9.0\BettingApi.sourcelink.json
-C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
-C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.Internal.dll
-C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
-C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
-C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Extensions.Identity.Core.dll
-C:\Users\hirus\Desktop\Softwareteknologi\4. semester\Projekt\WebApi-BettingApplikation\BettingApi\bin\Debug\net9.0\Microsoft.Extensions.Identity.Stores.dll

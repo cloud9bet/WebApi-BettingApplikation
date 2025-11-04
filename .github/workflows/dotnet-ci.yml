@@ -1,0 +1,45 @@
+name: .NET Unit Tests with Coverage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # lets you run manually
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    name: Run Unit Tests + Coverage
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run tests with coverage
+        run: dotnet test --no-build --collect:"XPlat Code Coverage" --logger:"trx;LogFileName=TestResults.xml"
+
+      - name: Install ReportGenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+      - name: Generate coverage report
+        run: |
+          reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coveragereport -reporttypes:Html;TextSummary
+          cat coveragereport/Summary.txt
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coveragereport/

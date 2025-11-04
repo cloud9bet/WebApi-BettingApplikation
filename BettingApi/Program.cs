@@ -33,6 +33,13 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ICoinFlipRandommizer, CoinFlipRandommizer>();
 builder.Services.AddScoped<ICoinFlipService, CoinFlipService>();
+builder.Services.AddScoped<IGenerateGrid, GenerateGrid>();
+builder.Services.AddScoped<ICalculatePayout, CalculatePayout>();
+builder.Services.AddScoped<ISlotMachineService, SlotMachineService>();
+
+
+
+
 builder.Services.AddScoped<IDepositService, DepositService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 

@@ -38,7 +38,7 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
     public async Task SetDepositLimitByIdAsync(int id, int depositLimit)
     {
         var user = await GetByIdAsync(id);
-        if (user != null)
+        if (user != null || depositLimit > 0)
         {
             user.DepositLimit = depositLimit;
             await SaveChangesAsync();

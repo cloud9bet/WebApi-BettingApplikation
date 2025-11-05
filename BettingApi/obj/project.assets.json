@@ -5076,23 +5076,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\hirus\\.nuget\\packages\\": {},
+    "C:\\Users\\velma\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\hirus\\Desktop\\Softwareteknologi\\4. semester\\Projekt\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
+      "projectUniqueName": "C:\\Users\\velma\\Desktop\\Software\\4.Semester\\Projekt\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
       "projectName": "BettingApi",
-      "projectPath": "C:\\Users\\hirus\\Desktop\\Softwareteknologi\\4. semester\\Projekt\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
-      "packagesPath": "C:\\Users\\hirus\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\hirus\\Desktop\\Softwareteknologi\\4. semester\\Projekt\\WebApi-BettingApplikation\\BettingApi\\obj\\",
+      "projectPath": "C:\\Users\\velma\\Desktop\\Software\\4.Semester\\Projekt\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
+      "packagesPath": "C:\\Users\\velma\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\velma\\Desktop\\Software\\4.Semester\\Projekt\\WebApi-BettingApplikation\\BettingApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\hirus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\velma\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

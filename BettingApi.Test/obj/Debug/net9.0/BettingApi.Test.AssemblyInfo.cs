@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BettingApi.Test")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+86859f60e0576bed6f6e8891d32ed8920cf20b3e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+25c157478cc41c1bb5cef3b942889df7b30c36e4")]
 [assembly: System.Reflection.AssemblyProductAttribute("BettingApi.Test")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BettingApi.Test")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,5 +1,5 @@
--- CREATE DATABASE BetAppDB;
--- GO
+CREATE DATABASE BetAppDB;
+GO
 
 Use BetAppDB;
 GO

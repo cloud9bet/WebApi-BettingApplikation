@@ -8,16 +8,20 @@ using Microsoft.AspNetCore.Identity;
 using BettingApi.Services;
 using BettingApi.Repositories;
 
+using BettingApi.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
-    {//ændrer cores kun til githubpages for admin og user
-        policy.AllowAnyOrigin()
+    {//ændrer cors kun til githubpages for admin og user
+        policy.WithOrigins(
+                            "http://localhost:5173",
+                            "https://cloud9bet.github.io")
+              .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowCredentials();
     });
 });
 
@@ -35,8 +39,14 @@ builder.Services.AddScoped<ICoinFlipRandommizer, CoinFlipRandommizer>();
 builder.Services.AddScoped<ICoinFlipService, CoinFlipService>();
 builder.Services.AddScoped<IDepositService, DepositService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+builder.Services.AddScoped<ISlotMachineService, SlotMachineService>();
 builder.Services.AddScoped<ICrashGameService, CrashGameService>();
+builder.Services.AddScoped<IGenerateGrid, GenerateGridClass>();
+builder.Services.AddScoped<ICalculatePayout, CalculatePayoutClass>();
+
+
+builder.Services.AddSignalR();
+
 
 
 builder.Services.AddIdentity<ApiUser, IdentityRole>(options =>
@@ -121,7 +131,6 @@ using (var scope = app.Services.CreateScope())
     await TestBetDbSeeder.Seed(context, userManager, roleManager);
 }
 
-app.UseCors("AllowAll");
 
 
 if (app.Environment.IsDevelopment())
@@ -131,8 +140,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+app.MapHub<CrashHub>("/CrashHub");
 
 app.Run();

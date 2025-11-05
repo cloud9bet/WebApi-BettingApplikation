@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "r2AmWXzItI4=",
+  "dgSpecHash": "j423+gVsLnY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\josep\\OneDrive\\Skrivebord\\project4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
+  "projectFilePath": "c:\\Users\\josep\\OneDrive\\Skrivebord\\project4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\josep\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\josep\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

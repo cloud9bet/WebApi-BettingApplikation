@@ -55,7 +55,7 @@ public class AuthService : IAuthService
         issuer: _configuration["JWT:Issuer"],
         audience: _configuration["JWT:Audience"],
         claims: claims,
-        expires: DateTime.Now.AddSeconds(60),
+        expires: DateTime.Now.AddSeconds(300),
         signingCredentials: signingCredentials);
 
         var jwtString = new JwtSecurityTokenHandler()
@@ -114,7 +114,7 @@ public class AuthService : IAuthService
             var refresh = new RefreshToken
             {
                 Token = CreateRefreshToken(),
-                ExpirationDate = DateTime.UtcNow.AddMinutes(2),
+                ExpirationDate = DateTime.UtcNow.AddMinutes(10),
                 ApiUserId = user.Id,
 
             };
@@ -145,7 +145,7 @@ public class AuthService : IAuthService
         var result = new TokenDto();
 
 
-        if (token != null && token.ExpirationDate > DateTime.Now)
+        if (token != null && token.ExpirationDate > DateTime.UtcNow)
         {
             await _refreshTokenRepository.UpdateRefreshToken(token.RefreshTokenId, DateTime.UtcNow.AddMinutes(2), CreateRefreshToken());
             var user = await _userManager.FindByIdAsync(token.ApiUserId);

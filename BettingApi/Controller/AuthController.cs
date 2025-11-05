@@ -50,12 +50,12 @@ namespace BettingApi.Controllers
         public async Task<ActionResult<TokenDto>> Refresh(string refreshToken)
         {
             var result = await _authService.RefreshJWTToken(refreshToken);
-            if (result != null)
+            if (result != null) //dog vil den aldrig være null men empty dto
             {
                 return Ok(result);
             }
 
-            return NotFound("RefreshToken not found");
+            return NotFound("RefreshToken not found or expired");
         }
 
     }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\josep\\OneDrive\\Skrivebord\\project4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj": {}
+    "c:\\Users\\josep\\OneDrive\\Skrivebord\\project4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\josep\\OneDrive\\Skrivebord\\project4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj": {
+    "c:\\Users\\josep\\OneDrive\\Skrivebord\\project4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\josep\\OneDrive\\Skrivebord\\project4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
+        "projectUniqueName": "c:\\Users\\josep\\OneDrive\\Skrivebord\\project4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
         "projectName": "BettingApi",
-        "projectPath": "C:\\Users\\josep\\OneDrive\\Skrivebord\\project4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
+        "projectPath": "c:\\Users\\josep\\OneDrive\\Skrivebord\\project4\\WebApi-BettingApplikation\\BettingApi\\BettingApi.csproj",
         "packagesPath": "C:\\Users\\josep\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\josep\\OneDrive\\Skrivebord\\project4\\WebApi-BettingApplikation\\BettingApi\\obj\\",
+        "outputPath": "c:\\Users\\josep\\OneDrive\\Skrivebord\\project4\\WebApi-BettingApplikation\\BettingApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

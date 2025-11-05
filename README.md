@@ -1,1 +1,0 @@
-[![.NET Unit Tests with Coverage](https://github.com/cloud9bet/WebApi-BettingApplikation/actions/workflows/dotnet-ci.yml/badge.svg)](https://github.com/cloud9bet/WebApi-BettingApplikation/actions/workflows/dotnet-ci.yml)

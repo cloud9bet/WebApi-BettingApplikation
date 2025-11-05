@@ -71,6 +71,8 @@ public class CalculatePayout : ICalculatePayout
         // Diagonal
         new Payline { Coords = new[]{(0,0),(1,1),(2,2)}, Type = "diagonal3" },
         new Payline { Coords = new[]{(0,2),(1,1),(2,0)}, Type = "diagonal3" },
+
+
     };
 
     public int CalcPayout(string[][] grid, int bet)

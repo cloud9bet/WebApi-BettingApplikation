@@ -39,7 +39,7 @@ jobs:
           PATH: ~/.dotnet/tools:${{ env.PATH }}
         run: |
           reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coveragereport "-reporttypes:Html;TextSummary"
-          cat coveragereport/Summary.txt
+          # cat coveragereport/Summary.txt
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4

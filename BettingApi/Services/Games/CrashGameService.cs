@@ -18,8 +18,11 @@ namespace BettingApi.Services
 
         public double Generate()
         {
-            // Lower values more likely — typical crash game RNG
-            return Math.Max(1.0, -Math.Log(_rng.NextDouble()) + 1.0);
+            double bias = 1.0;
+            double r = _rng.NextDouble();
+            double val = -Math.Log(1 - r) / bias;
+            double rounded = Math.Round(val * 10) / 10;
+            return Math.Max(1.03, rounded);
         }
     }
 
@@ -30,7 +33,7 @@ namespace BettingApi.Services
     public interface ICrashGameService
     {
         Task<CrashGameResultDto> CrashGamePlay(CrashGameRequestDto dto, int userAccountId);
-        Task<CrashGameResultDto> CashOut(int userAccountId);
+        Task<CrashGameResultDto> CashOut(int userAccountId, double multiplierStoppedAt);
     }
 
 
@@ -39,115 +42,126 @@ namespace BettingApi.Services
         private readonly IUserRepository _userRepository;
         private readonly ITransactionRepository _transactionRepository;
         private readonly ICrashRng _rng;
+        private readonly ICrashGameStateService _stateService;
 
         public CrashGameService(
-            ITransactionRepository transactionRepository,
-            IUserRepository userRepository,
-            ICrashRng rng
-        )
+            ITransactionRepository transactionRepository, 
+            IUserRepository userRepository, 
+            ICrashRng rng,
+            ICrashGameStateService stateService)
         {
             _transactionRepository = transactionRepository;
             _userRepository = userRepository;
             _rng = rng;
+            _stateService = stateService;
         }
 
 
         public async Task<CrashGameResultDto> CrashGamePlay(CrashGameRequestDto dto, int userAccountId)
         {
-            using var dbOperation = await _userRepository.BeginTransactionAsync();
-
-            try
-            {
-                var user = await _userRepository.GetByIdAsync(userAccountId);
-
-                if (user == null || !user.ActiveStatus)
-                {
-                    throw new Exception("User not active");
-                }
-
-                if (dto.BetAmount <= 0 || dto.BetAmount > user.Balance)
-                {
-                    throw new Exception("Insufficient balance");
-                }
-
-                // Withdraw bet
-                await _userRepository.UpdateBalanceByIdAsync(userAccountId, -dto.BetAmount);
-
-                double crashPoint = _rng.Generate();
-
-                bool isWin = dto.CashoutMultiplier < crashPoint;
-                int payout = -dto.BetAmount;
-
-                if (isWin)
-                {
-                    int winnings = (int)(dto.BetAmount * dto.CashoutMultiplier);
-                    payout += winnings;
-
-                    await _userRepository.UpdateBalanceByIdAsync(userAccountId, winnings);
-                }
-
-                var transaction = new Transaction
-                {
-                    UserAccountId = userAccountId,
-                    Date = DateOnly.FromDateTime(DateTime.UtcNow),
-                    Amount = payout,
-                    GameName = "Crash"
-                };
-
-                await _transactionRepository.AddAsync(transaction);
-                await _transactionRepository.SaveChangesAsync();
-
-                await dbOperation.CommitAsync();
-
-                return new CrashGameResultDto
-                {
-                    CrashPoint = crashPoint,
-                    IsWin = isWin,
-                    Payout = payout
-                };
-            }
-            catch (Exception ex)
-            {
-                await dbOperation.RollbackAsync();
-                throw new Exception($"Crash transaction failed: {ex.Message}");
-            }
-        }
-<<<<<<< HEAD
-=======
-
-
-        public async Task<CrashGameResultDto> CashOut(int userAccountId)
-        {
             var user = await _userRepository.GetByIdAsync(userAccountId);
+
             if (user == null || !user.ActiveStatus)
-                throw new Exception("User not found or inactive");
+            {
+                throw new Exception("User not active");
+            }
 
-            // Simpel demo: bare giv spilleren lidt gevinst
-            var random = GenerateCrashPoint();
-            double currentMultiplier = 4;
-            int payout = (int)(100 * currentMultiplier); // fx 100$ bet som test
+            if (dto.BetAmount <= 0 || dto.BetAmount > user.Balance)
+            {
+                throw new Exception("Insufficient balance");
+            }
 
-            await _userRepository.UpdateBalanceByIdAsync(userAccountId, payout);
+            // Check if user already has an active game
+            if (_stateService.TryGetGame(userAccountId, out _))
+            {
+                throw new Exception("You already have an active game running");
+            }
 
+            // Deduct bet from balance
+            await _userRepository.UpdateBalanceByIdAsync(userAccountId, -dto.BetAmount);
+
+            // Create loss transaction (bet amount)
+            var betTransaction = new Transaction
+            {
+                UserAccountId = userAccountId,
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
+                Amount = -dto.BetAmount,
+                GameName = "Crash"
+            };
+
+            await _transactionRepository.AddAsync(betTransaction);
+            await _transactionRepository.SaveChangesAsync();
+
+            // Generate crash point
+            double crashPoint = _rng.Generate();
+
+            // Store game state in singleton service
+            if (!_stateService.CreateGame(userAccountId, dto.BetAmount, crashPoint))
+            {
+                throw new Exception("Failed to create game state");
+            }
+
+            // Return crash point to client - client will animate and decide when to cash out
             return new CrashGameResultDto
             {
-                CrashPoint = currentMultiplier,
-                IsWin = true,
-                Payout = payout
+                CrashPoint = crashPoint,
+                IsWin = false,
+                Payout = 0
             };
         }
 
 
-
-        // Same crash curve concept used in many crash games (Hopefully)
-        private double GenerateCrashPoint()
+        // Cash out at current multiplier
+        public async Task<CrashGameResultDto> CashOut(int userAccountId, double multiplierStoppedAt)
         {
-                double bias = 1.0;
-                double r = _rng.NextDouble();
-                double val = -Math.Log(1 - r) / bias;
-                double rounded = Math.Round(val * 10) / 10;
-                return Math.Max(1.03, rounded);
+            // Get stored game state from singleton service
+            if (!_stateService.TryGetGame(userAccountId, out var game) || game == null)
+            {
+                throw new Exception("No active game found");
+            }
+
+            // Remove game from state
+            _stateService.RemoveGame(userAccountId);
+
+            // Check if already crashed
+            if (multiplierStoppedAt >= game.CrashPoint)
+            {
+                // Too late - already crashed, no refund
+                return new CrashGameResultDto
+                {
+                    CrashPoint = game.CrashPoint,
+                    IsWin = false,
+                    Payout = -game.BetAmount
+                };
+            }
+
+            // Calculate winnings
+            int winnings = (int)Math.Floor(game.BetAmount * multiplierStoppedAt);
+            
+            // Credit user balance
+            await _userRepository.UpdateBalanceByIdAsync(userAccountId, winnings);
+
+            // Create win transaction
+            var winTransaction = new Transaction
+            {
+                UserAccountId = userAccountId,
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
+                Amount = winnings,
+                GameName = "Crash"
+            };
+
+            await _transactionRepository.AddAsync(winTransaction);
+            await _transactionRepository.SaveChangesAsync();
+
+            // Net payout (winnings - bet)
+            int netPayout = winnings - game.BetAmount;
+
+            return new CrashGameResultDto
+            {
+                CrashPoint = game.CrashPoint,
+                IsWin = true,
+                Payout = netPayout
+            };
         }
->>>>>>> 3edd883c0f318745e01e65be83fd42bb8e5a6627
     }
 }

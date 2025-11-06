@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using BettingApi.Services;
 using BettingApi.Repositories;
 
-using BettingApi.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,12 +15,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {//ændrer cors kun til githubpages for admin og user
-        policy.WithOrigins(
-                            "http://localhost:5173",
-                            "https://cloud9bet.github.io")
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+              .AllowAnyMethod();
     });
 });
 
@@ -39,21 +35,13 @@ builder.Services.AddScoped<ICoinFlipRandommizer, CoinFlipRandommizer>();
 builder.Services.AddScoped<ICoinFlipService, CoinFlipService>();
 builder.Services.AddScoped<IDepositService, DepositService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-<<<<<<< HEAD
 
 builder.Services.AddScoped<ICrashRng, CrashRng>();
-=======
 builder.Services.AddScoped<ISlotMachineService, SlotMachineService>();
->>>>>>> 3edd883c0f318745e01e65be83fd42bb8e5a6627
 builder.Services.AddScoped<ICrashGameService, CrashGameService>();
+builder.Services.AddSingleton<ICrashGameStateService, CrashGameStateService>();
 builder.Services.AddScoped<IGenerateGrid, GenerateGridClass>();
 builder.Services.AddScoped<ICalculatePayout, CalculatePayoutClass>();
-
-
-builder.Services.AddSignalR();
-
-
-
 
 
 builder.Services.AddIdentity<ApiUser, IdentityRole>(options =>
@@ -152,8 +140,7 @@ app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-app.MapHub<CrashHub>("/CrashHub");
+
 
 app.Run();

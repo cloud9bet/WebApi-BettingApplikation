@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("c4218279-6bf5-4d0d-b7f6-cb7b2e724f6c")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("BettingApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+427b38fd6925f7b4b0cb72ea41b6fe332c4cd2cf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+43b75d86d042195023265f0a5ab3362a56773bb7")]
 [assembly: System.Reflection.AssemblyProductAttribute("BettingApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BettingApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

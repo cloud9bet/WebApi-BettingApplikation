@@ -30,6 +30,7 @@ namespace BettingApi.Services
     public interface ICrashGameService
     {
         Task<CrashGameResultDto> CrashGamePlay(CrashGameRequestDto dto, int userAccountId);
+        Task<CrashGameResultDto> CashOut(int userAccountId);
     }
 
 
@@ -111,5 +112,42 @@ namespace BettingApi.Services
                 throw new Exception($"Crash transaction failed: {ex.Message}");
             }
         }
+<<<<<<< HEAD
+=======
+
+
+        public async Task<CrashGameResultDto> CashOut(int userAccountId)
+        {
+            var user = await _userRepository.GetByIdAsync(userAccountId);
+            if (user == null || !user.ActiveStatus)
+                throw new Exception("User not found or inactive");
+
+            // Simpel demo: bare giv spilleren lidt gevinst
+            var random = GenerateCrashPoint();
+            double currentMultiplier = 4;
+            int payout = (int)(100 * currentMultiplier); // fx 100$ bet som test
+
+            await _userRepository.UpdateBalanceByIdAsync(userAccountId, payout);
+
+            return new CrashGameResultDto
+            {
+                CrashPoint = currentMultiplier,
+                IsWin = true,
+                Payout = payout
+            };
+        }
+
+
+
+        // Same crash curve concept used in many crash games (Hopefully)
+        private double GenerateCrashPoint()
+        {
+                double bias = 1.0;
+                double r = _rng.NextDouble();
+                double val = -Math.Log(1 - r) / bias;
+                double rounded = Math.Round(val * 10) / 10;
+                return Math.Max(1.03, rounded);
+        }
+>>>>>>> 3edd883c0f318745e01e65be83fd42bb8e5a6627
     }
 }

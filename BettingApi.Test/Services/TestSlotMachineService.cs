@@ -11,6 +11,7 @@ using System.Data.Common;
 using System.Net.Http.Headers;
 using System.Xml.Serialization;
 
+
 //malleballe
 public class SlotMachineServiceTest
 {
@@ -132,22 +133,22 @@ public class SlotMachineServiceTest
     [InlineData("🍒", "horizontal3", 10)]
     [InlineData("🍒", "vertical3", 15)]
     [InlineData("🍒", "diagonal3", 12)]
-    [InlineData("🍒", "fullgrid",(10 * 3) + (15 * 3) + (12 * 2))]
+    [InlineData("🍒", "fullgrid", (10 * 3) + (15 * 3) + (12 * 2))]
     [InlineData("🍀", "horizontal3", 12)]
     [InlineData("🍀", "vertical3", 15)]
     [InlineData("🍀", "diagonal3", 14)]
-    [InlineData("🍀", "fullgrid",(12 * 3) + (15 * 3) + (14 * 2))]
+    [InlineData("🍀", "fullgrid", (12 * 3) + (15 * 3) + (14 * 2))]
     [InlineData("9️⃣", "horizontal3", 50)]
     [InlineData("9️⃣", "vertical3", 60)]
     [InlineData("9️⃣", "diagonal3", 55)]
-    [InlineData("9️⃣", "fullgrid",(50 * 3) + (60 * 3) + (55 * 2))]
+    [InlineData("9️⃣", "fullgrid", (50 * 3) + (60 * 3) + (55 * 2))]
     [InlineData("🪙", "horizontal3", 25)]
     [InlineData("🪙", "vertical3", 30)]
     [InlineData("🪙", "diagonal3", 28)]
-    [InlineData("🪙", "fullgrid",(25 * 3) + (30 * 3) + (28 * 2))]
-    [InlineData("🍒","WhenTopRowAndFirstColumnAreCherries",10+15)]// CalcPayout_ShouldReturn25_WhenTopRowAndFirstColumnAreCherries
-    [InlineData("9️⃣","pluslines_symbol9", 50 + 60)] // Testing a plus sign combination
-    [InlineData("🍀","xlinesTrekløver", 14 * 2)] // Testing a X sign combination
+    [InlineData("🪙", "fullgrid", (25 * 3) + (30 * 3) + (28 * 2))]
+    [InlineData("🍒", "WhenTopRowAndFirstColumnAreCherries", 10 + 15)]// CalcPayout_ShouldReturn25_WhenTopRowAndFirstColumnAreCherries
+    [InlineData("9️⃣", "pluslines_symbol9", 50 + 60)] // Testing a plus sign combination
+    [InlineData("🍀", "xlinesTrekløver", 14 * 2)] // Testing a X sign combination
     public void CalcPayout_ShouldReturnExpected_WhenThreeOfSameSymbol(string symbol, string type, int expected)
     {
         var calc = new CalculatePayout();
@@ -224,7 +225,7 @@ public class SlotMachineServiceTest
     [InlineData("🪙", "fullgrid", (25 * 3) + (30 * 3) + (28 * 2))]
     [InlineData("🍒", "WhenTopRowAndFirstColumnAreCherries", 10 + 15)]// CalcPayout_ShouldReturn25_WhenTopRowAndFirstColumnAreCherries
     [InlineData("9️⃣", "pluslines_symbol9", 50 + 60)] // Testing a plus sign combination
-    [InlineData("🍀", "xlinesTrekløver", 14*2)] // Testing a X sign combination
+    [InlineData("🍀", "xlinesTrekløver", 14 * 2)] // Testing a X sign combination
     public void CalcPayout_ShouldReturnExpected_WhenThreeOfSameSymbol_WithBet20(string symbol, string type, int expected)
     {
         var calc = new CalculatePayout();
@@ -296,7 +297,7 @@ public class SlotMachineServiceTest
 
         Assert.Equal(35, result);
     }
-    
+
     [Fact]
     public void CalcPayout_ShouldReturn75_WhenToLinesCherryAndCoin()
     {
@@ -322,8 +323,8 @@ public class SlotMachineServiceTest
         var grid = gen.MakeGrid();
 
         Assert.NotNull(grid);
-        Assert.Equal(3,grid.Length);
-        Assert.All(grid, row=> Assert.Equal(3,row.Length));
+        Assert.Equal(3, grid.Length);
+        Assert.All(grid, row => Assert.Equal(3, row.Length));
     }
 
     [Fact]

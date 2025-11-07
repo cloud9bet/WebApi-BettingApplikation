@@ -39,8 +39,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICrashRng, CrashRng>();
 builder.Services.AddScoped<ISlotMachineService, SlotMachineService>();
 builder.Services.AddScoped<ICrashGameService, CrashGameService>();
-builder.Services.AddScoped<IGenerateGrid, GenerateGridClass>();
-builder.Services.AddScoped<ICalculatePayout, CalculatePayoutClass>();
+builder.Services.AddScoped<IGenerateGrid, GenerateGrid>();
+builder.Services.AddScoped<ICalculatePayout, CalculatePayout>();
 
 
 builder.Services.AddIdentity<ApiUser, IdentityRole>(options =>

@@ -19,15 +19,15 @@ public class SymbolPayout
 
 public interface IGenerateGrid
 {
-    string[][] GenerateGrid();
+    string[][] MakeGrid();
 }
 
-public class GenerateGridClass : IGenerateGrid
+public class GenerateGrid : IGenerateGrid
 {
     private readonly Random _random = new();
     private static readonly string[] SYMBOLS = { "🍒", "🍀", "9️⃣", "🪙" };
 
-    public string[][] GenerateGrid()
+    public string[][] MakeGrid()
     {
         var grid = new string[3][];
         for (int r = 0; r < 3; r++)
@@ -45,11 +45,11 @@ public class GenerateGridClass : IGenerateGrid
 
 public interface ICalculatePayout
 {
-    int CalculatePayout(string[][] grid, int bet);
+    int CalcPayout(string[][] grid, int bet);
 }
 
 
-public class CalculatePayoutClass : ICalculatePayout
+public class CalculatePayout : ICalculatePayout
 {
     private readonly Dictionary<string, SymbolPayout> PAYOUTS = new()
     {
@@ -71,9 +71,11 @@ public class CalculatePayoutClass : ICalculatePayout
         // Diagonal
         new Payline { Coords = new[]{(0,0),(1,1),(2,2)}, Type = "diagonal3" },
         new Payline { Coords = new[]{(0,2),(1,1),(2,0)}, Type = "diagonal3" },
+
+
     };
 
-    public int CalculatePayout(string[][] grid, int bet)
+    public int CalcPayout(string[][] grid, int bet)
     {
         int total = 0;
 
@@ -138,13 +140,13 @@ public class SlotMachineService : ISlotMachineService
 
                 if(user!=null && user.ActiveStatus)
                 {
-                    if(bet<=user.Balance)
+                    if(bet<=user.Balance && bet > 0)
                     {
                         DateOnly dateNow = DateOnly.FromDateTime(DateTime.UtcNow);
                         await _userRepository.UpdateBalanceByIdAsync(id, -bet);
 
-                        var grid = _generateGrid.GenerateGrid();
-                        var payout = _calculatePayout.CalculatePayout(grid, bet);
+                        var grid = _generateGrid.MakeGrid();
+                        var payout = _calculatePayout.CalcPayout(grid, bet);
                         
                         var result = new SlotMachineResultDto
                         {
@@ -184,23 +186,27 @@ public class SlotMachineService : ISlotMachineService
                         await dbOperation.CommitAsync();
                         return result;
 
-
                     }
+
+                    else
+                    {
+                        throw new Exception("Insufficient funds");
+                    }
+
                 }
 
-                throw new Exception ("User not found or not active from service");
+                throw new Exception ("User not found or inactive");
 
             }
             catch(Exception ex)
             {
                 await dbOperation.RollbackAsync();
-                throw new Exception($"Slot transaction failed {ex.Message}");
+                throw new Exception($"Slotmachine transaction failed: {ex.Message}");
             }
             
         }
 
 
 }
-
 
 

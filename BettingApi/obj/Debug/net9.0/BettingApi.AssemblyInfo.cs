@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BettingApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+43b75d86d042195023265f0a5ab3362a56773bb7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+234665329bef14be740e165d142c25c509413ef1")]
 [assembly: System.Reflection.AssemblyProductAttribute("BettingApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BettingApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

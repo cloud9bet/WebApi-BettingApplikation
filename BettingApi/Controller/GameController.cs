@@ -111,28 +111,6 @@ namespace BettingApi.Controllers
             }
         }
 
-        [Authorize(Roles = "User")]
-        [HttpPost("Crash/CashOut")]
-        public async Task<ActionResult<CrashGameResultDto>> CashOut([FromBody] double multiplierStoppedAt)
-        {
-            try
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var user = await _userManager.FindByIdAsync(userId);
-
-                if (user == null)
-                    return NotFound("User not found");
-
-                var userAccountId = user.UserAccountId ?? 0;
-
-                var result = await _crashGameService.CashOut(userAccountId, multiplierStoppedAt);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-        }
 
 
     }

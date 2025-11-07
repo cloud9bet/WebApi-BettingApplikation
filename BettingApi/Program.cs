@@ -39,7 +39,6 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICrashRng, CrashRng>();
 builder.Services.AddScoped<ISlotMachineService, SlotMachineService>();
 builder.Services.AddScoped<ICrashGameService, CrashGameService>();
-builder.Services.AddSingleton<ICrashGameStateService, CrashGameStateService>();
 builder.Services.AddScoped<IGenerateGrid, GenerateGridClass>();
 builder.Services.AddScoped<ICalculatePayout, CalculatePayoutClass>();
 

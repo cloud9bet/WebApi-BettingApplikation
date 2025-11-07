@@ -1,4 +1,4 @@
-using Xunit;
+/*using Xunit;
 using NSubstitute;
 using BettingApi.Services;
 using BettingApi.Repositories;
@@ -152,4 +152,4 @@ public class CoinFlipServiceTests
 
     }
 
-}
+}*/

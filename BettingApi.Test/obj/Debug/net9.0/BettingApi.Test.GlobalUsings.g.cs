@@ -6,7 +6,4 @@ global using global::System.Linq;
 global using global::System.Net.Http;
 global using global::System.Threading;
 global using global::System.Threading.Tasks;
-<<<<<<< HEAD
 global using global::Xunit;
-=======
->>>>>>> 25c157478cc41c1bb5cef3b942889df7b30c36e4

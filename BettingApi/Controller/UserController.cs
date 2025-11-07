@@ -125,8 +125,3 @@ namespace BettingApi.Controllers
 
     }
 }
-
-
-
-
-

@@ -19,12 +19,14 @@ namespace BettingApi.Controllers
         private readonly UserManager<ApiUser> _userManager;
 
         private readonly ISlotMachineService _slotMachineService;
+        private readonly ICrashGameService _crashGameService;
 
-        public GameController(ICoinFlipService coinFlipService,ISlotMachineService slotMachineService,UserManager<ApiUser> userManager)
+        public GameController(ICoinFlipService coinFlipService, ISlotMachineService slotMachineService, UserManager<ApiUser> userManager, ICrashGameService crashGameService)
         {
             _coinFlipService = coinFlipService;
-            _userManager = userManager;
             _slotMachineService = slotMachineService;
+            _crashGameService = crashGameService;
+            _userManager = userManager;
         }
 
 
@@ -54,10 +56,10 @@ namespace BettingApi.Controllers
             }
         }
 
-        
+
         [Authorize(Roles = "User")]
         [HttpPost("Slotmachine")]
-        public async Task<ActionResult<SlotMachineResultDto>> PlaySlot( int betAmount)
+        public async Task<ActionResult<SlotMachineResultDto>> PlaySlot(int betAmount)
         {
 
 
@@ -78,11 +80,34 @@ namespace BettingApi.Controllers
                 return Ok(result);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //Tager excepetion fra service laget.
-                return BadRequest(new {message = ex.Message});
+                return BadRequest(new { message = ex.Message });
 
+            }
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost("Crash")]
+        public async Task<ActionResult<CrashGameResultDto>> PlayCrash(CrashGameRequestDto dto)
+        {
+            try
+            {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+                return NotFound("User not found");
+
+            var userAccountId = user.UserAccountId ?? 0;
+
+            var result = await _crashGameService.CrashGamePlay(dto, userAccountId);
+            return Ok(result);
+            }
+            catch (Exception ex)
+            {
+            return BadRequest(new { message = ex.Message });
             }
         }
 
@@ -90,8 +115,3 @@ namespace BettingApi.Controllers
 
     }
 }
-
-
-
-
-

@@ -2,6 +2,8 @@ using BettingApi.Models;
 using BettingApi.Dto;
 using BettingApi.Repositories;
 
+
+
 //Til Auth
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -53,7 +55,7 @@ public class AuthService : IAuthService
         issuer: _configuration["JWT:Issuer"],
         audience: _configuration["JWT:Audience"],
         claims: claims,
-        expires: DateTime.Now.AddSeconds(60),
+        expires: DateTime.Now.AddSeconds(6000),
         signingCredentials: signingCredentials);
 
         var jwtString = new JwtSecurityTokenHandler()
@@ -112,7 +114,7 @@ public class AuthService : IAuthService
             var refresh = new RefreshToken
             {
                 Token = CreateRefreshToken(),
-                ExpirationDate = DateTime.UtcNow.AddMinutes(2),
+                ExpirationDate = DateTime.UtcNow.AddMinutes(20),
                 ApiUserId = user.Id,
 
             };
@@ -140,21 +142,22 @@ public class AuthService : IAuthService
     public async Task<TokenDto> RefreshJWTToken(string refreshToken)
     {
         var token = await _refreshTokenRepository.GetRefreshTokenByValue(refreshToken);
-        
-        if (token != null && token.ExpirationDate > DateTime.UtcNow)
+        var result = new TokenDto();
+
+
+        if (token != null && token.ExpirationDate > DateTime.Now)
         {
             await _refreshTokenRepository.UpdateRefreshToken(token.RefreshTokenId, DateTime.UtcNow.AddMinutes(2), CreateRefreshToken());
             var user = await _userManager.FindByIdAsync(token.ApiUserId);
             var jwtToken = await getJWT(user);
-            return new TokenDto
-            {
-            JWTtoken = jwtToken,
-            RefreshToken = token.Token
-            };
 
+            result.JWTtoken = jwtToken;
+            result.RefreshToken = token.Token;
+
+            return result;
         }
 
-        return null;
+        return result;
     }
 
     private string CreateRefreshToken()

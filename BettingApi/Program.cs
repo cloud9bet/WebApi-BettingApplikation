@@ -14,10 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
-    {//ændrer cores kun til githubpages for admin og user
+    {//ændrer cors kun til githubpages for admin og user
         policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
@@ -33,15 +33,14 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ICoinFlipRandommizer, CoinFlipRandommizer>();
 builder.Services.AddScoped<ICoinFlipService, CoinFlipService>();
-builder.Services.AddScoped<IGenerateGrid, GenerateGrid>();
-builder.Services.AddScoped<ICalculatePayout, CalculatePayout>();
-builder.Services.AddScoped<ISlotMachineService, SlotMachineService>();
-
-
-
-
 builder.Services.AddScoped<IDepositService, DepositService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<ICrashRng, CrashRng>();
+builder.Services.AddScoped<ISlotMachineService, SlotMachineService>();
+builder.Services.AddScoped<ICrashGameService, CrashGameService>();
+builder.Services.AddScoped<IGenerateGrid, GenerateGridClass>();
+builder.Services.AddScoped<ICalculatePayout, CalculatePayoutClass>();
 
 
 builder.Services.AddIdentity<ApiUser, IdentityRole>(options =>
@@ -126,7 +125,6 @@ using (var scope = app.Services.CreateScope())
     await TestBetDbSeeder.Seed(context, userManager, roleManager);
 }
 
-app.UseCors("AllowAll");
 
 
 if (app.Environment.IsDevelopment())
@@ -136,8 +134,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
 
 app.Run();

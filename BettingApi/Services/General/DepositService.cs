@@ -51,7 +51,7 @@ public class DepositService : IDepositService
             }
             else
             {
-             throw new Exception("Amount exceeds depositLimit from service");
+             throw new Exception("Amount exceeds depositLimit");
             }
         }
     }

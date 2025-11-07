@@ -55,7 +55,7 @@ public class AuthService : IAuthService
         issuer: _configuration["JWT:Issuer"],
         audience: _configuration["JWT:Audience"],
         claims: claims,
-        expires: DateTime.Now.AddSeconds(60),
+        expires: DateTime.Now.AddSeconds(6000),
         signingCredentials: signingCredentials);
 
         var jwtString = new JwtSecurityTokenHandler()
@@ -114,7 +114,7 @@ public class AuthService : IAuthService
             var refresh = new RefreshToken
             {
                 Token = CreateRefreshToken(),
-                ExpirationDate = DateTime.UtcNow.AddMinutes(2),
+                ExpirationDate = DateTime.UtcNow.AddMinutes(20),
                 ApiUserId = user.Id,
 
             };

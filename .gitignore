@@ -1,0 +1,115 @@
+## Build Folders
+bin/
+obj/
+out/
+[Bb]uild/
+[Ll]og/
+
+## User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.rsuser
+*.sln.docstates
+
+## IDE settings
+.vs/
+.idea/
+*.swp
+*.bak
+*.tmp
+*.old
+
+## ASP.NET / IIS
+*.publish.xml
+*.pubxml
+*.pubxml.user
+App_Data/
+App_Data/*
+project.lock.json
+
+## .NET Core
+project.fragment.lock.json
+artifacts/
+*.deps.json
+*.runtimeconfig.json
+*.dll
+*.exe
+*.pdb
+*.db
+
+## Cache and temporary files
+*.cache
+*.log
+*.tlog
+*.vspscc
+*.vssscc
+*.vscode/
+.vscode/*
+*.tmp
+*.temp
+*.DS_Store
+
+## Rider / JetBrains
+.idea/
+*.sln.iml
+
+## Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+## NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+.nuget/
+*.nuget.props
+*.nuget.targets
+
+## Azure functions / publishing
+.local.settings.json
+.publishprofiles/
+
+## Entity Framework
+Migrations/obj/
+Migrations/bin/
+
+## Docker
+*.container
+*.tar
+docker-compose.override.yml
+docker-compose.*.yml
+
+## OS-specific
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+$RECYCLE.BIN/
+
+## Environment files
+.env
+.env.*
+.env.local
+.env.development
+.env.production
+
+## Logs
+logs/
+*.log
+*.trace
+*.stacktrace
+*.dmp
+
+## Coverage / Reports
+coverage/
+coverage-report/
+*.coverage
+*.cov
+*.opencover.xml
+*.cobertura.xml
+*.lcov

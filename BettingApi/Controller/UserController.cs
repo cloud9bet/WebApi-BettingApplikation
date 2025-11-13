@@ -49,7 +49,7 @@ namespace BettingApi.Controllers
         [HttpPut("depositlimit")]
         public async Task<ActionResult> SetUserDepositLimit(int amount)
         {
-             if(amount <= 0) return BadRequest("DepositLimit can't be zero or negative");
+             if(amount <= 0) return BadRequest("DepositLimit can't be zero or negative"); //fejlhåntering 
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);

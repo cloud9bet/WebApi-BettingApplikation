@@ -121,6 +121,7 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<BetAppDbContext>();
     var userManager = services.GetRequiredService<UserManager<ApiUser>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    context.Database.Migrate();
 
     await TestBetDbSeeder.Seed(context, userManager, roleManager);
 }
@@ -133,8 +134,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+}
 
+app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 
 app.UseAuthentication();

@@ -102,7 +102,6 @@ namespace BettingApi.Controllers
             }
             else
                 return NotFound($"User not found");
-
         }
 
         [Authorize(Roles = "User")]
@@ -117,6 +116,22 @@ namespace BettingApi.Controllers
                 var deposit = await _transactionRepository.GetAllTransactionByUserIdAsync(user.UserAccountId ?? 0);
                 return Ok(deposit);
 
+            }
+            else
+                return NotFound($"User not found");
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpGet("/preset")]
+        public async Task<ActionResult<IEnumerable<UserInfoDto>>> GetUserPresets()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user != null)
+            {
+                var preset = await _userRepository.GetUserPresetsAsync(user.UserAccountId ?? 0);
+                return Ok(preset);
             }
             else
                 return NotFound($"User not found");

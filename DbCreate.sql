@@ -1,7 +1,7 @@
-CREATE DATABASE BetAppDB;
-GO
+-- CREATE DATABASE BetAppDB;
+-- GO
 
-Use betDB;
+Use BetAppDB;
 GO
 SELECT * FROM Transactions;
 

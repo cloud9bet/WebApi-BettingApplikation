@@ -16,7 +16,7 @@ namespace BettingApi.Services;
 
 public interface IAuthService
 {
-    Task Register(RegisterDto dto);
+    Task<bool> Register(RegisterDto dto);
     Task<TokenDto> Login(LoginDto dto);
     Task LogOut(string refreshToken);
 
@@ -55,7 +55,7 @@ public class AuthService : IAuthService
         issuer: _configuration["JWT:Issuer"],
         audience: _configuration["JWT:Audience"],
         claims: claims,
-        expires: DateTime.Now.AddSeconds(6000),
+        expires: DateTime.Now.AddSeconds(180),
         signingCredentials: signingCredentials);
 
         var jwtString = new JwtSecurityTokenHandler()
@@ -64,7 +64,7 @@ public class AuthService : IAuthService
         return jwtString;
     }
 
-    public async Task Register(RegisterDto dto)
+    public async Task<bool> Register(RegisterDto dto)
     {
         var UserAccount = new UserAccount
         {
@@ -87,6 +87,11 @@ public class AuthService : IAuthService
         if (result.Succeeded)
         {
             await _userManager.AddToRoleAsync(newUser, "User");
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -106,7 +111,7 @@ public class AuthService : IAuthService
             {
                 _refreshTokenRepository.Delete(existingToken);
                 await _refreshTokenRepository.SaveChangesAsync();
-      
+
             }
 
             Token = await getJWT(user);
@@ -114,7 +119,7 @@ public class AuthService : IAuthService
             var refresh = new RefreshToken
             {
                 Token = CreateRefreshToken(),
-                ExpirationDate = DateTime.UtcNow.AddMinutes(20),
+                ExpirationDate = DateTime.UtcNow.AddMinutes(10),
                 ApiUserId = user.Id,
 
             };
@@ -124,8 +129,10 @@ public class AuthService : IAuthService
 
             Result.JWTtoken = Token;
             Result.RefreshToken = refresh.Token;
+            return Result;
         }
-        return Result;
+        return null;
+       
     }
 
     public async Task LogOut(string refreshToken)
@@ -142,23 +149,23 @@ public class AuthService : IAuthService
     public async Task<TokenDto> RefreshJWTToken(string refreshToken)
     {
         var token = await _refreshTokenRepository.GetRefreshTokenByValue(refreshToken);
-        var result = new TokenDto();
 
-
-        if (token != null && token.ExpirationDate > DateTime.Now)
+        if (token != null && token.ExpirationDate > DateTime.UtcNow)
         {
-            await _refreshTokenRepository.UpdateRefreshToken(token.RefreshTokenId, DateTime.UtcNow.AddMinutes(2), CreateRefreshToken());
+            await _refreshTokenRepository.UpdateRefreshToken(token.RefreshTokenId, DateTime.UtcNow.AddMinutes(3), CreateRefreshToken());
             var user = await _userManager.FindByIdAsync(token.ApiUserId);
             var jwtToken = await getJWT(user);
+            return new TokenDto
+            {
+                JWTtoken = jwtToken,
+                RefreshToken = token.Token
+            };
 
-            result.JWTtoken = jwtToken;
-            result.RefreshToken = token.Token;
-
-            return result;
         }
 
-        return result;
+        return null;
     }
+
 
     private string CreateRefreshToken()
     {

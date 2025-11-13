@@ -21,9 +21,12 @@ namespace BettingApi.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody] RegisterDto dto)
         {
-            await _authService.Register(dto);
-
+            var result = await _authService.Register(dto);
+            if (result)
+            {
             return StatusCode(201);
+            }
+            return BadRequest("Password does not meet the requirements");
 
         }
 
@@ -35,8 +38,7 @@ namespace BettingApi.Controllers
             {
                 return Ok(result); 
             }  
-
-            return NotFound("Invalid credentials");
+            return NotFound("Invalid login credentials");
         }
 
         [HttpPost("logout")]

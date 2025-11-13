@@ -12,7 +12,7 @@ public interface IUserRepository : IRepository<UserAccount>
     Task DeleteUserByIdAsync(int id);
     Task<IEnumerable<UserTagDto>> GetAllUserTagsAsync();
     Task<IEnumerable<UserInfoDto>> GetAllUserInfoAsync();
-    Task<UserInfoDto> GetUserPresetsAsync();
+    Task<UserPresetsDto> GetUserPresetsByIdAsync(int id);
 
 }
 
@@ -32,8 +32,8 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
             user.Balance += amount;
             await SaveChangesAsync();
         }
-
     }
+    
 
     public async Task SetDepositLimitByIdAsync(int id, int depositLimit)
     {
@@ -45,6 +45,7 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
         }
     }
     
+
     public async Task SetActiveStatusByIdAsync(int id, bool activeStatus)
     {
         var user = await GetByIdAsync(id);
@@ -55,6 +56,7 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
         }
     }
 
+
     public async Task DeleteUserByIdAsync(int id)
     {
         var user = await GetByIdAsync(id);
@@ -64,6 +66,7 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
             await SaveChangesAsync();
         }
     }
+
 
     public async Task<IEnumerable<UserTagDto>> GetAllUserTagsAsync()
     {
@@ -76,6 +79,7 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
 
         return users;
     }
+
 
     public async Task<IEnumerable<UserInfoDto>> GetAllUserInfoAsync()
     {
@@ -93,11 +97,12 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
         return users;
     }
 
-    public async Task<UserPresetsDto> GetUserPresetsAsync(int id)
+
+    public async Task<UserPresetsDto> GetUserPresetsByIdAsync(int id)
     {
         var user = await GetByIdAsync(id);
 
-        return new UserInfoDto
+        return new UserPresetsDto
         {
            Balance = user.Balance,
            DepositLimit = user.DepositLimit,

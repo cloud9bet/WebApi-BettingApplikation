@@ -32,6 +32,7 @@ namespace BettingApi.Controllers
         [HttpPost("deposit")]
         public async Task<ActionResult> Deposit(int amount)
         {
+            if(amount <= 0) return BadRequest("Amount can't be zero or negative");
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
 
@@ -41,18 +42,19 @@ namespace BettingApi.Controllers
                 return StatusCode(201);
             }
 
-            return NotFound();
-
+            return NotFound("User not found");
         }
 
         [Authorize(Roles = "User")]
         [HttpPut("depositlimit")]
         public async Task<ActionResult> SetUserDepositLimit(int amount)
         {
+             if(amount <= 0) return BadRequest("DepositLimit can't be zero or negative");
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user != null)
+            if (user != null )
             {
                 await _userRepository.SetDepositLimitByIdAsync(user.UserAccountId ?? 0, amount);
                 return NoContent();
@@ -90,7 +92,7 @@ namespace BettingApi.Controllers
         [Authorize(Roles = "User")]
         [HttpGet("/deposit")]
         public async Task<ActionResult<IEnumerable<DepositResultDto>>> GetAllUserDepositAsync()
-        {
+        {  
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
 
@@ -130,11 +132,11 @@ namespace BettingApi.Controllers
 
             if (user != null)
             {
-                var preset = await _userRepository.GetUserPresetsAsync(user.UserAccountId ?? 0);
+                var preset = await _userRepository.GetUserPresetsByIdAsync(user.UserAccountId ?? 0);
                 return Ok(preset);
             }
             else
-                return NotFound($"User not found");
+                return NotFound("User not found");
 
         }
 

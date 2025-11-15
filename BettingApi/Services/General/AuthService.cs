@@ -149,16 +149,17 @@ public class AuthService : IAuthService
     public async Task<TokenDto> RefreshJWTToken(string refreshToken)
     {
         var token = await _refreshTokenRepository.GetRefreshTokenByValue(refreshToken);
+        var newToken = CreateRefreshToken();
 
         if (token != null && token.ExpirationDate > DateTime.UtcNow)
         {
-            await _refreshTokenRepository.UpdateRefreshToken(token.RefreshTokenId, DateTime.UtcNow.AddMinutes(3), CreateRefreshToken());
+            await _refreshTokenRepository.UpdateRefreshToken(token.RefreshTokenId, DateTime.UtcNow.AddMinutes(10), newToken);
             var user = await _userManager.FindByIdAsync(token.ApiUserId);
             var jwtToken = await getJWT(user);
             return new TokenDto
             {
                 JWTtoken = jwtToken,
-                RefreshToken = token.Token
+                RefreshToken = newToken
             };
 
         }

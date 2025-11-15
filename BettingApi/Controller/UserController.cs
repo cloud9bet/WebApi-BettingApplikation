@@ -38,7 +38,7 @@ namespace BettingApi.Controllers
 
             if (user != null)
             {
-                await _depositService.AddDepositAsync(amount, user.UserAccountId ?? 0);
+                await _depositService.AddDepositAsync(amount, user.UserAccountId ?? 0); // i retun true eller false
                 return StatusCode(201);
             }
 
@@ -107,7 +107,7 @@ namespace BettingApi.Controllers
         }
 
         [Authorize(Roles = "User")]
-        [HttpGet("/transaction")]
+        [HttpGet("transaction")]
         public async Task<ActionResult<IEnumerable<TransactionDto>>> GetAllUserTransactionAsync()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -124,7 +124,7 @@ namespace BettingApi.Controllers
         }
 
         [Authorize(Roles = "User")]
-        [HttpGet("/preset")]
+        [HttpGet("preset")]
         public async Task<ActionResult<IEnumerable<UserInfoDto>>> GetUserPresets()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -36,13 +36,31 @@ namespace BettingApi.Controllers
             return NoContent();
         }
 
+//test det her endpoint
+        [Authorize(Roles = "Admin")]
+        [HttpGet("/[controller]/tag")]
+        public async Task<ActionResult<IEnumerable<UserTagDto>>> GetAllUserTagsAsync()
+        {
+            var users = await _userRepository.GetAllUserTagsAsync();
+
+            if (users.Any())
+            {
+                return Ok(users);
+            }
+            else
+                return NotFound($"User tags were not found");
+
+        }
+
+
+//test det her endpoint
         [Authorize(Roles = "Admin")]
         [HttpGet("/[controller]/user")]
         public async Task<ActionResult<IEnumerable<UserInfoDto>>> GetAllUserInfoAsync()
         {
             var users = await _userRepository.GetAllUserInfoAsync();
 
-            if (users != null)
+            if (users.Any())
             {
                 return Ok(users);
             }

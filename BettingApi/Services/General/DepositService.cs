@@ -12,7 +12,7 @@ public interface IDepositService
 
     Task<IEnumerable<DepositResultDto>> GetAllDepositAsync();
 
-    Task AddDepositAsync(int amount, int id);
+    Task<bool> AddDepositAsync(int amount, int id);
 }
 
 public class DepositService : IDepositService
@@ -32,7 +32,7 @@ public class DepositService : IDepositService
         return deposits;
     }
     
-    public async Task AddDepositAsync(int amount, int id)
+    public async Task<bool> AddDepositAsync(int amount, int id)
     {
         var user = await _userRepository.GetByIdAsync(id);
         if (user != null)
@@ -48,12 +48,14 @@ public class DepositService : IDepositService
                 await _depositrepository.AddAsync(deposit);
                 user.Balance += amount;
                 await _depositrepository.SaveChangesAsync();
+                return true;
             }
             else
             {
-             throw new Exception("Amount exceeds depositLimit"); // maybe ændre til return null
+            return false;
             }
         }
+        return false;
     }
 
     public async Task<IEnumerable<DepositResultDto>> GetAllDepositAsync()

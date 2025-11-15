@@ -18,7 +18,7 @@ namespace BettingApi.Controllers
         private readonly UserManager<ApiUser> _userManager;
         private readonly ITransactionRepository _transactionRepository;
 
-        public UserController(IUserRepository userRepository, IDepositService depositService, 
+        public UserController(IUserRepository userRepository, IDepositService depositService,
         ITransactionRepository transactionRepository, UserManager<ApiUser> userManager)
         {
             _userRepository = userRepository;
@@ -32,14 +32,21 @@ namespace BettingApi.Controllers
         [HttpPost("deposit")]
         public async Task<ActionResult> Deposit(int amount)
         {
-            if(amount <= 0) return BadRequest("Amount can't be zero or negative");
+            if (amount <= 0) return BadRequest("Amount can't be zero or negative");
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user != null)
             {
-                await _depositService.AddDepositAsync(amount, user.UserAccountId ?? 0); // i retun true eller false
-                return StatusCode(201);
+                var result = await _depositService.AddDepositAsync(amount, user.UserAccountId ?? 0); // i return true eller false
+                if (result == true)
+                {
+                    return StatusCode(201);
+                }
+                else
+                {
+                    return NotFound("Amount cannot exceed depositlimit");
+                }
             }
 
             return NotFound("User not found");
@@ -49,12 +56,12 @@ namespace BettingApi.Controllers
         [HttpPut("depositlimit")]
         public async Task<ActionResult> SetUserDepositLimit(int amount)
         {
-             if(amount <= 0) return BadRequest("DepositLimit can't be zero or negative"); //fejlhåntering 
+            if (amount <= 0) return BadRequest("DepositLimit can't be zero or negative"); //fejlhåntering 
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user != null )
+            if (user != null)
             {
                 await _userRepository.SetDepositLimitByIdAsync(user.UserAccountId ?? 0, amount);
                 return NoContent();
@@ -72,13 +79,13 @@ namespace BettingApi.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             if (user != null)
             {
-              var userAccount = await _userRepository.GetByIdAsync(user.UserAccountId ?? 0);
-                userAccount.UserName ="DELETED";
+                var userAccount = await _userRepository.GetByIdAsync(user.UserAccountId ?? 0);
+                userAccount.UserName = "DELETED";
                 userAccount.Balance = 0;
                 userAccount.DepositLimit = null;
                 userAccount.ActiveStatus = false;
 
-               await _userRepository.SaveChangesAsync();
+                await _userRepository.SaveChangesAsync();
 
 
                 await _userManager.DeleteAsync(user);
@@ -92,7 +99,7 @@ namespace BettingApi.Controllers
         [Authorize(Roles = "User")]
         [HttpGet("/deposit")]
         public async Task<ActionResult<IEnumerable<DepositResultDto>>> GetAllUserDepositAsync()
-        {  
+        {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
 

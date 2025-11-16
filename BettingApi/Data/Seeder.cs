@@ -43,6 +43,7 @@ namespace BettingApi.Data
             var testUserAccount = new UserAccount
             {
                 UserName = "user",
+                Balance = 10000
             };
 
             var res = await context.UserAccounts.AddAsync(testUserAccount);

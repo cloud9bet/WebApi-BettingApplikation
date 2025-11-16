@@ -18,7 +18,6 @@ public interface IAuthService
 {
     Task<bool> Register(RegisterDto dto);
     Task<TokenDto> Login(LoginDto dto);
-    Task LogOut(string refreshToken);
 
     Task<TokenDto> RefreshJWTToken(string refreshToken);
 

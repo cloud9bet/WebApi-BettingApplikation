@@ -41,13 +41,6 @@ namespace BettingApi.Controllers
             return NotFound("Invalid login credentials");
         }
 
-        [HttpPost("logout")]
-        public async Task<ActionResult> Logout(string refreshToken)
-        {
-            await _authService.LogOut(refreshToken);
-            return Ok();
-        }
-
         [HttpPost("refresh")]
         public async Task<ActionResult<TokenDto>> Refresh(string refreshToken)
         {

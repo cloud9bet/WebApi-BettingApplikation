@@ -135,17 +135,6 @@ public class AuthService : IAuthService
        
     }
 
-    public async Task LogOut(string refreshToken)
-    {
-        var token = await _refreshTokenRepository.GetRefreshTokenByValue(refreshToken);
-        if (token != null)
-        {
-            _refreshTokenRepository.Delete(token);
-            await _refreshTokenRepository.SaveChangesAsync();
-        }
-    }
-
-
     public async Task<TokenDto> RefreshJWTToken(string refreshToken)
     {
         var token = await _refreshTokenRepository.GetRefreshTokenByValue(refreshToken);

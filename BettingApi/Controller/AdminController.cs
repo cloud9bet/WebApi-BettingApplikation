@@ -55,7 +55,7 @@ namespace BettingApi.Controllers
 
 //test det her endpoint
         [Authorize(Roles = "Admin")]
-        [HttpGet("/[controller]/user{id}")]
+        [HttpGet("/[controller]/user/{id}")]
         public async Task<ActionResult<UserInfoDto>> GetAllUserInfoByIdAsync(int id)
         {
             var user = await _userRepository.GetAllUserInfoByIdAsync(id);

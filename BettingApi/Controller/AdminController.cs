@@ -55,14 +55,14 @@ namespace BettingApi.Controllers
 
 //test det her endpoint
         [Authorize(Roles = "Admin")]
-        [HttpGet("/[controller]/user")]
-        public async Task<ActionResult<IEnumerable<UserInfoDto>>> GetAllUserInfoAsync()
+        [HttpGet("/[controller]/user{id}")]
+        public async Task<ActionResult<UserInfoDto>> GetAllUserInfoByIdAsync(int id)
         {
-            var users = await _userRepository.GetAllUserInfoAsync();
+            var user = await _userRepository.GetAllUserInfoByIdAsync(id);
 
-            if (users.Any())
+            if (user != null)
             {
-                return Ok(users);
+                return Ok(user);
             }
             else
                 return NotFound($"Users was not found");

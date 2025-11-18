@@ -132,7 +132,7 @@ namespace BettingApi.Controllers
 
         [Authorize(Roles = "User")]
         [HttpGet("preset")]
-        public async Task<ActionResult<IEnumerable<UserInfoDto>>> GetUserPresets()
+        public async Task<ActionResult<UserInfoDto>> GetUserPresets()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);

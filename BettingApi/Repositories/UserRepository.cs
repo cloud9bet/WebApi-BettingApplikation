@@ -11,7 +11,7 @@ public interface IUserRepository : IRepository<UserAccount>
     Task SetActiveStatusByIdAsync(int id, bool activeStatus);
     Task DeleteUserByIdAsync(int id);
     Task<IEnumerable<UserTagDto>> GetAllUserTagsAsync();
-    Task<IEnumerable<UserInfoDto>> GetAllUserInfoAsync();
+    Task<UserInfoDto> GetAllUserInfoByIdAsync(int id);
     Task<UserPresetsDto> GetUserPresetsByIdAsync(int id);
 
 }
@@ -33,7 +33,7 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
             await SaveChangesAsync();
         }
     }
-    
+
 
     public async Task SetDepositLimitByIdAsync(int id, int depositLimit)
     {
@@ -44,7 +44,7 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
             await SaveChangesAsync();
         }
     }
-    
+
 
     public async Task SetActiveStatusByIdAsync(int id, bool activeStatus)
     {
@@ -81,34 +81,34 @@ public class UserRepository : Repository<UserAccount>, IUserRepository
     }
 
 
-    public async Task<IEnumerable<UserInfoDto>> GetAllUserInfoAsync()
+    public async Task<UserInfoDto> GetAllUserInfoByIdAsync(int id)
     {
-        var users = await _dbSet
-       .Select(UI => new UserInfoDto
-       {
-           UserAccountId = UI.UserAccountId,
-           UserName = UI.UserName,
-           Balance = UI.Balance,
-           DepositLimit = UI.DepositLimit,
-           ActiveStatus = UI.ActiveStatus
+        var user = await GetByIdAsync(id);
+        if (user != null)
+        {
 
-       }).ToListAsync();
-
-        return users;
+            return new UserInfoDto
+            {
+                UserAccountId = user.UserAccountId,
+                UserName = user.UserName,
+                Balance = user.Balance,
+                DepositLimit = user.DepositLimit,
+                ActiveStatus = user.ActiveStatus
+            };
+        }
+        return null;
     }
 
 
     public async Task<UserPresetsDto> GetUserPresetsByIdAsync(int id)
     {
         var user = await GetByIdAsync(id);
-
-        return new UserPresetsDto
-        {
-           Balance = user.Balance,
-           DepositLimit = user.DepositLimit,
-           ActiveStatus = user.ActiveStatus
-        };
+       
+            return new UserPresetsDto
+            {
+                Balance = user.Balance,
+                DepositLimit = user.DepositLimit,
+                ActiveStatus = user.ActiveStatus
+            };
     }
-
-
 }

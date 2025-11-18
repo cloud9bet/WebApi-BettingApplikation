@@ -13,9 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-    {//ændrer cors kun til githubpages for admin og user
-        policy.AllowAnyOrigin()
+    options.AddPolicy("AllowGithubPages", policy =>
+    {
+        policy.WithOrigins("https://cloud9bet.github.io") 
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -140,7 +140,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
+app.UseCors("AllowGithubPages");
 
 app.UseAuthentication();
 app.UseAuthorization();

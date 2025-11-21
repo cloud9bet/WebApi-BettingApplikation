@@ -91,9 +91,9 @@ public class SlotMachineServiceTest
     [Fact]
     public async Task SlotMacginePlay_ShouldReturnNegativeResult_WhenNoWin()
     {
-        var grid = new[] { new[]{"🍒","🍋","🪙"},
-                           new[]{"🍀","9️⃣","🍋"},
-                           new[]{"🪙","🍒","🍀"}};
+        var grid = new[] { new[]{"D","N","D"},
+                           new[]{"CL","N","CL"},
+                           new[]{"C","C","D"}};
 
         var user = new UserAccount { UserAccountId = 1, Balance = 100, ActiveStatus = true };
         _userRepo.GetByIdAsync(1).Returns(user);
@@ -111,9 +111,9 @@ public class SlotMachineServiceTest
     [Fact]
     public async Task SlotMacginePlay_ShouldReturnPositiveResult_WhenWin()
     {
-        var grid = new[] { new[]{"🍒","🍋","🪙"},
-                           new[]{"🍒","9️⃣","🍋"},
-                           new[]{"🍒","🍒","🍀"}};
+        var grid = new[] { new[]{"D","CL","C"},
+                           new[]{"D","N","N"},
+                           new[]{"D","D","CL"}};
 
         var user = new UserAccount { UserAccountId = 1, Balance = 100, ActiveStatus = true };
         _userRepo.GetByIdAsync(1).Returns(user);
@@ -130,25 +130,29 @@ public class SlotMachineServiceTest
     //Test af CalculatePayout
     // Bet med 10. Skal give det samme tilbage, som står iexpect
     [Theory]
-    [InlineData("🍒", "horizontal3", 10)]
-    [InlineData("🍒", "vertical3", 15)]
-    [InlineData("🍒", "diagonal3", 12)]
-    [InlineData("🍒", "fullgrid", (10 * 3) + (15 * 3) + (12 * 2))]
-    [InlineData("🍀", "horizontal3", 12)]
-    [InlineData("🍀", "vertical3", 15)]
-    [InlineData("🍀", "diagonal3", 14)]
-    [InlineData("🍀", "fullgrid", (12 * 3) + (15 * 3) + (14 * 2))]
-    [InlineData("9️⃣", "horizontal3", 50)]
-    [InlineData("9️⃣", "vertical3", 60)]
-    [InlineData("9️⃣", "diagonal3", 55)]
-    [InlineData("9️⃣", "fullgrid", (50 * 3) + (60 * 3) + (55 * 2))]
-    [InlineData("🪙", "horizontal3", 25)]
-    [InlineData("🪙", "vertical3", 30)]
-    [InlineData("🪙", "diagonal3", 28)]
-    [InlineData("🪙", "fullgrid", (25 * 3) + (30 * 3) + (28 * 2))]
-    [InlineData("🍒", "WhenTopRowAndFirstColumnAreCherries", 10 + 15)]// CalcPayout_ShouldReturn25_WhenTopRowAndFirstColumnAreCherries
-    [InlineData("9️⃣", "pluslines_symbol9", 50 + 60)] // Testing a plus sign combination
-    [InlineData("🍀", "xlinesTrekløver", 14 * 2)] // Testing a X sign combination
+    [InlineData("D", "horizontal3", 10)]
+    [InlineData("D", "vertical3", 15)]
+    [InlineData("D", "diagonal3", 12)]
+    [InlineData("D", "fullgrid", (10 * 3) + (15 * 3) + (12 * 2))]
+
+    [InlineData("CL", "horizontal3", 12)]
+    [InlineData("CL", "vertical3", 15)]
+    [InlineData("CL", "diagonal3", 14)]
+    [InlineData("CL", "fullgrid", (12 * 3) + (15 * 3) + (14 * 2))]
+
+    [InlineData("N", "horizontal3", 50)]
+    [InlineData("N", "vertical3", 60)]
+    [InlineData("N", "diagonal3", 55)]
+    [InlineData("N", "fullgrid", (50 * 3) + (60 * 3) + (55 * 2))]
+
+    [InlineData("C", "horizontal3", 25)]
+    [InlineData("C", "vertical3", 30)]
+    [InlineData("C", "diagonal3", 28)]
+    [InlineData("C", "fullgrid", (25 * 3) + (30 * 3) + (28 * 2))]
+
+    [InlineData("D", "WhenTopRowAndFirstColumnAreCherries", 10 + 15)]// CalcPayout_ShouldReturn25_WhenTopRowAndFirstColumnAreCherries
+    [InlineData("N", "pluslines_symbol9", 50 + 60)] // Testing a plus sign combination
+    [InlineData("CL", "xlinesTrekløver", 14 * 2)] // Testing a X sign combination
     public void CalcPayout_ShouldReturnExpected_WhenThreeOfSameSymbol(string symbol, string type, int expected)
     {
         var calc = new CalculatePayout();
@@ -157,46 +161,53 @@ public class SlotMachineServiceTest
         {
             "horizontal3" => new[]
             {
-                new[] { symbol, symbol, symbol },
-                new[] { "🍀","9️⃣","🪙" },
-                new[] { "🍋","🍒","🍒" }
-            },
+            new[] { symbol, symbol, symbol },
+            new[] { "x", "x", "x" },
+            new[] { "x", "x", "x" }
+        },
+
             "vertical3" => new[]
             {
-                new[] { symbol,"🍀","9️⃣" },
-                new[] { symbol,"🍒","🪙" },
-                new[] { symbol,"🍋","🍀" }
-            },
+            new[] { symbol, "x", "x" },
+            new[] { symbol, "x", "x" },
+            new[] { symbol, "x", "x" }
+        },
+
             "diagonal3" => new[]
             {
-                new[] { symbol,"🍀","🪙" },
-                new[] { "🍀",symbol,"🍋" },
-                new[] { "9️⃣","🍒",symbol }
-            },
+            new[] { symbol, "x", "x" },
+            new[] { "x", symbol, "x" },
+            new[] { "x", "x", symbol }
+        },
+
             "fullgrid" => new[]
             {
-                new[] { symbol,symbol,symbol},
-                new[] { symbol,symbol,symbol },
-                new[] { symbol,symbol,symbol }
-            },
+            new[] { symbol, symbol, symbol },
+            new[] { symbol, symbol, symbol },
+            new[] { symbol, symbol, symbol }
+        },
+
             "WhenTopRowAndFirstColumnAreCherries" => new[]
             {
-                new[]{symbol,symbol,symbol},
-                new[]{symbol,"🍀","🪙"},
-                new[]{symbol,"🍀","🍀"}
-            },
+            new[] { symbol, symbol, symbol },
+            new[] { symbol, "x", "x" },
+            new[] { symbol, "x", "x" }
+        },
+
             "pluslines_symbol9" => new[]
             {
-                new[] { "🍒",symbol,"🍒"},
-                new[] { symbol,symbol,symbol },
-                new[] { "🍋",symbol,"🍒"}
-            },
+            new[] { "x", symbol, "x" },
+            new[] { symbol, symbol, symbol },
+            new[] { "x", symbol, "x" }
+        },
+
             "xlinesTrekløver" => new[]
             {
-                new[] { symbol,"🍒",symbol},
-                new[] { "🍒",symbol,"🍒" },
-                new[] { symbol,"🍒",symbol}
-            },
+            new[] { symbol, "x", symbol },
+            new[] { "x", symbol, "x" },
+            new[] { symbol, "x", symbol }
+        },
+
             _ => throw new ArgumentException("Invalid type")
         };
 
@@ -207,90 +218,100 @@ public class SlotMachineServiceTest
 
     // Bet med 20. Skal give det dobbelte tilbage, som står i expected
     [Theory]
-    [InlineData("🍒", "horizontal3", 10)]
-    [InlineData("🍒", "vertical3", 15)]
-    [InlineData("🍒", "diagonal3", 12)]
-    [InlineData("🍒", "fullgrid", (10 * 3) + (15 * 3) + (12 * 2))]
-    [InlineData("🍀", "horizontal3", 12)]
-    [InlineData("🍀", "vertical3", 15)]
-    [InlineData("🍀", "diagonal3", 14)]
-    [InlineData("🍀", "fullgrid", (12 * 3) + (15 * 3) + (14 * 2))]
-    [InlineData("9️⃣", "horizontal3", 50)]
-    [InlineData("9️⃣", "vertical3", 60)]
-    [InlineData("9️⃣", "diagonal3", 55)]
-    [InlineData("9️⃣", "fullgrid", (50 * 3) + (60 * 3) + (55 * 2))]
-    [InlineData("🪙", "horizontal3", 25)]
-    [InlineData("🪙", "vertical3", 30)]
-    [InlineData("🪙", "diagonal3", 28)]
-    [InlineData("🪙", "fullgrid", (25 * 3) + (30 * 3) + (28 * 2))]
-    [InlineData("🍒", "WhenTopRowAndFirstColumnAreCherries", 10 + 15)]// CalcPayout_ShouldReturn25_WhenTopRowAndFirstColumnAreCherries
-    [InlineData("9️⃣", "pluslines_symbol9", 50 + 60)] // Testing a plus sign combination
-    [InlineData("🍀", "xlinesTrekløver", 14 * 2)] // Testing a X sign combination
+    [InlineData("D", "horizontal3", 10)]
+    [InlineData("D", "vertical3", 15)]
+    [InlineData("D", "diagonal3", 12)]
+    [InlineData("D", "fullgrid", (10 * 3) + (15 * 3) + (12 * 2))]
+    [InlineData("CL", "horizontal3", 12)]
+    [InlineData("CL", "vertical3", 15)]
+    [InlineData("CL", "diagonal3", 14)]
+    [InlineData("CL", "fullgrid", (12 * 3) + (15 * 3) + (14 * 2))]
+    [InlineData("N", "horizontal3", 50)]
+    [InlineData("N", "vertical3", 60)]
+    [InlineData("N", "diagonal3", 55)]
+    [InlineData("N", "fullgrid", (50 * 3) + (60 * 3) + (55 * 2))]
+    [InlineData("C", "horizontal3", 25)]
+    [InlineData("C", "vertical3", 30)]
+    [InlineData("C", "diagonal3", 28)]
+    [InlineData("C", "fullgrid", (25 * 3) + (30 * 3) + (28 * 2))]
+    [InlineData("D", "WhenTopRowAndFirstColumnAreCherries", 10 + 15)]// CalcPayout_ShouldReturn25_WhenTopRowAndFirstColumnAreCherries
+    [InlineData("N", "pluslines_symbol9", 50 + 60)] // Testing a plus sign combination
+    [InlineData("CL", "xlinesTrekløver", 14 * 2)] // Testing a X sign combination
     public void CalcPayout_ShouldReturnExpected_WhenThreeOfSameSymbol_WithBet20(string symbol, string type, int expected)
     {
         var calc = new CalculatePayout();
 
+
+        
         string[][] grid = type switch
         {
             "horizontal3" => new[]
             {
-                new[] { symbol, symbol, symbol },
-                new[] { "🍀","9️⃣","🪙" },
-                new[] { "🍋","🍒","🍒" }
-            },
+            new[] { symbol, symbol, symbol },
+            new[] { "x", "x", "x" },
+            new[] { "x", "x", "x" }
+        },
+
             "vertical3" => new[]
             {
-                new[] { symbol,"🍀","9️⃣" },
-                new[] { symbol,"🍒","🪙" },
-                new[] { symbol,"🍋","🍀" }
-            },
+            new[] { symbol, "x", "x" },
+            new[] { symbol, "x", "x" },
+            new[] { symbol, "x", "x" }
+        },
+
             "diagonal3" => new[]
             {
-                new[] { symbol,"🍀","🪙" },
-                new[] { "🍀",symbol,"🍋" },
-                new[] { "9️⃣","🍒",symbol }
-            },
+            new[] { symbol, "x", "x" },
+            new[] { "x", symbol, "x" },
+            new[] { "x", "x", symbol }
+        },
+
             "fullgrid" => new[]
             {
-                new[] { symbol,symbol,symbol},
-                new[] { symbol,symbol,symbol },
-                new[] { symbol,symbol,symbol }
-            },
+            new[] { symbol, symbol, symbol },
+            new[] { symbol, symbol, symbol },
+            new[] { symbol, symbol, symbol }
+        },
+
             "WhenTopRowAndFirstColumnAreCherries" => new[]
             {
-                new[]{symbol,symbol,symbol},
-                new[]{symbol,"🍀","🪙"},
-                new[]{symbol,"🍀","🍀"}
-            },
+            new[] { symbol, symbol, symbol },
+            new[] { symbol, "x", "x" },
+            new[] { symbol, "x", "x" }
+        },
+
             "pluslines_symbol9" => new[]
             {
-                new[] { "🍒",symbol,"🍒"},
-                new[] { symbol,symbol,symbol },
-                new[] { "🍋",symbol,"🍒"}
-            },
+            new[] { "x", symbol, "x" },
+            new[] { symbol, symbol, symbol },
+            new[] { "x", symbol, "x" }
+        },
+
             "xlinesTrekløver" => new[]
             {
-                new[] { symbol,"🍒",symbol},
-                new[] { "🍒",symbol,"🍒" },
-                new[] { symbol,"🍒",symbol}
-            },
+            new[] { symbol, "x", symbol },
+            new[] { "x", symbol, "x" },
+            new[] { symbol, "x", symbol }
+        },
+
             _ => throw new ArgumentException("Invalid type")
         };
 
+
         int result = calc.CalcPayout(grid, 20);
 
-        Assert.Equal(expected * 2, result);
+        Assert.Equal(expected*2, result);
     }
 
     [Fact]
-    public void CalcPayout_ShouldReturn35_WhenToLinesCherryAndCoin()
+    public void CalcPayout_ShouldReturn35_WhenToLinesDiamondAndCoin()
     {
         var calc = new CalculatePayout();
         var grid = new[]
         {
-            new[]{"🍒","🍒","🍒"},
-            new[]{"🪙","🪙","🪙"},
-            new[]{"🍒","🍀","🍀"}
+            new[]{"D","D","D"},
+            new[]{"C","C","C"},
+            new[]{"D","CL","CL"}
         };
 
         int result = calc.CalcPayout(grid, 10);
@@ -299,14 +320,14 @@ public class SlotMachineServiceTest
     }
 
     [Fact]
-    public void CalcPayout_ShouldReturn75_WhenToLinesCherryAndCoin()
+    public void CalcPayout_ShouldReturn75_WhenToLinesNineAndCloverHorizontal()
     {
         var calc = new CalculatePayout();
         var grid = new[]
         {
-            new[]{"9️⃣","🍀","🍒"},
-            new[]{"9️⃣","🍀","🪙"},
-            new[]{"9️⃣","🍀","🍀"}
+            new[]{"N","CL","D"},
+            new[]{"N","CL","C"},
+            new[]{"N","CL","CL"}
         };
 
         int result = calc.CalcPayout(grid, 10);
@@ -333,7 +354,7 @@ public class SlotMachineServiceTest
         var gen = new GenerateGrid();
         var grid = gen.MakeGrid();
 
-        var validSymbols = new[] { "🍒", "🍀", "9️⃣", "🪙" };
+        var validSymbols = new[] { "D", "CL", "N", "C" };
 
         Assert.All(grid.SelectMany(row => row),
             symbol => Assert.Contains(symbol, validSymbols));

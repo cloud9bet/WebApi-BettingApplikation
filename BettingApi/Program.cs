@@ -13,13 +13,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowGithubPages", policy =>
+    options.AddPolicy("AllowGithubPagesAndLocal", policy =>
     {
-        policy.WithOrigins("https://cloud9bet.github.io") 
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(
+                "https://cloud9bet.github.io",
+                "http://localhost:5173"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // kun hvis du bruger cookies eller auth
     });
 });
+
 
 builder.Services.AddControllers();
 
@@ -140,7 +145,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowGithubPages");
+app.UseCors("AllowGithubPagesAndLocal");
 
 app.UseAuthentication();
 app.UseAuthorization();

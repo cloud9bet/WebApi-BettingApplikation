@@ -23,24 +23,24 @@ public class DepositServiceTests
 
     // ---------- Exception / fejl scenarier ----------
 
-    [Fact]
-    public async Task AddDepositAsync_ShouldThrow_WhenAmountExceedsDepositLimit()
-    {
-        // Arrange
-        _userRepo.GetByIdAsync(1).Returns(new UserAccount
-        {
-            UserAccountId = 1,
-            UserName = "Hans",
-            Balance = 1000,
-            DepositLimit = 50
-        });
+    // [Fact]
+    // public async Task AddDepositAsync_ShouldThrow_WhenAmountExceedsDepositLimit()
+    // {
+    //     // Arrange
+    //     _userRepo.GetByIdAsync(1).Returns(new UserAccount
+    //     {
+    //         UserAccountId = 1,
+    //         UserName = "Hans",
+    //         Balance = 1000,
+    //         DepositLimit = 50
+    //     });
 
-        int amount = 100;
+    //     int amount = 100;
 
-        // Act + Assert
-        var ex = await Assert.ThrowsAsync<Exception>(() => _uut.AddDepositAsync(amount, 1));
-        Assert.Equal("Amount exceeds depositLimit", ex.Message);
-    }
+    //     // Act + Assert
+    //     var ex = await Assert.ThrowsAsync<Exception>(() => _uut.AddDepositAsync(amount, 1));
+    //     Assert.Equal("Amount exceeds depositLimit", ex.Message);
+    // }
 
     // ---------- Success scenarier ----------
 

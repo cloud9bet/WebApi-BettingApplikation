@@ -25,7 +25,15 @@ public interface IGenerateGrid
 public class GenerateGrid : IGenerateGrid
 {
     private readonly Random _random = new();
-    private static readonly string[] SYMBOLS = { "🍒", "🍀", "9️⃣", "🪙" };
+
+    /*
+    D = DIAMOND
+    CL = CLOVER
+    N = NINE
+    C = COIN
+    */
+    private static readonly string[] SYMBOLS = { "D", "CL", "N", "C" };
+
 
     public string[][] MakeGrid()
     {
@@ -53,10 +61,10 @@ public class CalculatePayout : ICalculatePayout
 {
     private readonly Dictionary<string, SymbolPayout> PAYOUTS = new()
     {
-        ["🍒"] = new SymbolPayout { Horizontal3 = 10, Vertical3 = 15, Diagonal3 = 12 },
-        ["🍀"] = new SymbolPayout { Horizontal3 = 12, Vertical3 = 15, Diagonal3 = 14 },
-        ["9️⃣"] = new SymbolPayout { Horizontal3 = 50, Vertical3 = 60, Diagonal3 = 55 },
-        ["🪙"] = new SymbolPayout { Horizontal3 = 25, Vertical3 = 30, Diagonal3 = 28 }
+        ["D"] = new SymbolPayout { Horizontal3 = 10, Vertical3 = 15, Diagonal3 = 12 },
+        ["CL"] = new SymbolPayout { Horizontal3 = 12, Vertical3 = 15, Diagonal3 = 14 },
+        ["N"] = new SymbolPayout { Horizontal3 = 50, Vertical3 = 60, Diagonal3 = 55 },
+        ["C"] = new SymbolPayout { Horizontal3 = 25, Vertical3 = 30, Diagonal3 = 28 }
     };
     private readonly List<Payline> PAYLINES = new()
     {

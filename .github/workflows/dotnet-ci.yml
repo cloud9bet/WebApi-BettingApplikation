@@ -1,31 +1,30 @@
-name: .NET Unit Tests
+name: CI - pipeline
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:  # allows manual run
+    branches:
+      - main
 
 jobs:
-  unit-tests:
+  build-test:
     runs-on: ubuntu-latest
-    name: Run Unit Tests
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Check out repository code
+        uses: actions/checkout@v2
 
-      - name: Setup .NET 9 SDK
-        uses: actions/setup-dotnet@v4
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '9.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore 
 
-      - name: Build
-        run: dotnet build --no-restore --configuration Release
+      - name: Build the solution
+        run: dotnet build --configuration Release --no-restore
 
-      - name: Run tests
-        run: dotnet test --no-build --logger:"trx;LogFileName=TestResults.xml"
+      - name: Run unit test
+        run: dotnet test --configuration Release 
+
+

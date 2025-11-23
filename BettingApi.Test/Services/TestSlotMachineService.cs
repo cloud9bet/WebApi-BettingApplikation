@@ -130,10 +130,10 @@ public class SlotMachineServiceTest
     //Test af CalculatePayout
     // Bet med 10. Skal give det samme tilbage, som står iexpect
     [Theory]
-    [InlineData("D", "horizontal3", 10)]
+    [InlineData("D", "horizontal3", 13)]
     [InlineData("D", "vertical3", 15)]
     [InlineData("D", "diagonal3", 12)]
-    [InlineData("D", "fullgrid", (10 * 3) + (15 * 3) + (12 * 2))]
+    [InlineData("D", "fullgrid", (13 * 3) + (15 * 3) + (12 * 2))]
 
     [InlineData("CL", "horizontal3", 12)]
     [InlineData("CL", "vertical3", 15)]
@@ -150,7 +150,7 @@ public class SlotMachineServiceTest
     [InlineData("C", "diagonal3", 28)]
     [InlineData("C", "fullgrid", (25 * 3) + (30 * 3) + (28 * 2))]
 
-    [InlineData("D", "WhenTopRowAndFirstColumnAreCherries", 10 + 15)]// CalcPayout_ShouldReturn25_WhenTopRowAndFirstColumnAreCherries
+    [InlineData("D", "WhenTopRowAndFirstColumnAreDiamond", 13 + 15)]// CalcPayout_ShouldReturn25_WhenTopRowAndFirstColumnAreCherries
     [InlineData("N", "pluslines_symbol9", 50 + 60)] // Testing a plus sign combination
     [InlineData("CL", "xlinesTrekløver", 14 * 2)] // Testing a X sign combination
     public void CalcPayout_ShouldReturnExpected_WhenThreeOfSameSymbol(string symbol, string type, int expected)
@@ -187,7 +187,7 @@ public class SlotMachineServiceTest
             new[] { symbol, symbol, symbol }
         },
 
-            "WhenTopRowAndFirstColumnAreCherries" => new[]
+            "WhenTopRowAndFirstColumnAreDiamond" => new[]
             {
             new[] { symbol, symbol, symbol },
             new[] { symbol, "x", "x" },
@@ -218,10 +218,10 @@ public class SlotMachineServiceTest
 
     // Bet med 20. Skal give det dobbelte tilbage, som står i expected
     [Theory]
-    [InlineData("D", "horizontal3", 10)]
+    [InlineData("D", "horizontal3", 13)]
     [InlineData("D", "vertical3", 15)]
     [InlineData("D", "diagonal3", 12)]
-    [InlineData("D", "fullgrid", (10 * 3) + (15 * 3) + (12 * 2))]
+    [InlineData("D", "fullgrid", (13 * 3) + (15 * 3) + (12 * 2))]
     [InlineData("CL", "horizontal3", 12)]
     [InlineData("CL", "vertical3", 15)]
     [InlineData("CL", "diagonal3", 14)]
@@ -234,7 +234,7 @@ public class SlotMachineServiceTest
     [InlineData("C", "vertical3", 30)]
     [InlineData("C", "diagonal3", 28)]
     [InlineData("C", "fullgrid", (25 * 3) + (30 * 3) + (28 * 2))]
-    [InlineData("D", "WhenTopRowAndFirstColumnAreCherries", 10 + 15)]// CalcPayout_ShouldReturn25_WhenTopRowAndFirstColumnAreCherries
+    [InlineData("D", "WhenTopRowAndFirstColumnAreDiamond", 13 + 15)]// CalcPayout_ShouldReturn25_WhenTopRowAndFirstColumnAreCherries
     [InlineData("N", "pluslines_symbol9", 50 + 60)] // Testing a plus sign combination
     [InlineData("CL", "xlinesTrekløver", 14 * 2)] // Testing a X sign combination
     public void CalcPayout_ShouldReturnExpected_WhenThreeOfSameSymbol_WithBet20(string symbol, string type, int expected)
@@ -273,7 +273,7 @@ public class SlotMachineServiceTest
             new[] { symbol, symbol, symbol }
         },
 
-            "WhenTopRowAndFirstColumnAreCherries" => new[]
+            "WhenTopRowAndFirstColumnAreDiamond" => new[]
             {
             new[] { symbol, symbol, symbol },
             new[] { symbol, "x", "x" },
@@ -316,7 +316,7 @@ public class SlotMachineServiceTest
 
         int result = calc.CalcPayout(grid, 10);
 
-        Assert.Equal(35, result);
+        Assert.Equal(38, result);
     }
 
     [Fact]

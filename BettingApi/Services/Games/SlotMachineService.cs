@@ -61,7 +61,7 @@ public class CalculatePayout : ICalculatePayout
 {
     private readonly Dictionary<string, SymbolPayout> PAYOUTS = new()
     {
-        ["D"] = new SymbolPayout { Horizontal3 = 10, Vertical3 = 15, Diagonal3 = 12 },
+        ["D"] = new SymbolPayout { Horizontal3 = 13, Vertical3 = 15, Diagonal3 = 12 },
         ["CL"] = new SymbolPayout { Horizontal3 = 12, Vertical3 = 15, Diagonal3 = 14 },
         ["N"] = new SymbolPayout { Horizontal3 = 50, Vertical3 = 60, Diagonal3 = 55 },
         ["C"] = new SymbolPayout { Horizontal3 = 25, Vertical3 = 30, Diagonal3 = 28 }

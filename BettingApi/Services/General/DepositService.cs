@@ -9,9 +9,6 @@ namespace BettingApi.Services;
 public interface IDepositService
 {
     Task<IEnumerable<DepositResultDto>> GetAllDepositByUserIdAsync(int id);
-
-    Task<IEnumerable<DepositResultDto>> GetAllDepositAsync();
-
     Task<bool> AddDepositAsync(int amount, int id);
 }
 
@@ -57,12 +54,5 @@ public class DepositService : IDepositService
         }
         return false;
     }
-
-    public async Task<IEnumerable<DepositResultDto>> GetAllDepositAsync()
-    {
-        var deposits = await _depositrepository.GetAllDepositForAllUsersAsync();
-        return deposits; 
-    }
-
 
 }

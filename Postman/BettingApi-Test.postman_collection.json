@@ -96,7 +96,7 @@
 					"response": []
 				},
 				{
-					"name": "GetAllUserInfo",
+					"name": "GetAllUserTag",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -135,7 +135,7 @@
 						},
 						"method": "GET",
 						"header": [],
-						"url": "{{base_url}}/Admin/user"
+						"url": "{{base_url}}/Admin/tag"
 					},
 					"response": []
 				},
@@ -624,82 +624,6 @@
 							"path": [
 								"Auth",
 								"refresh"
-							],
-							"query": [
-								{
-									"key": "refreshToken",
-									"value": "{{refreshToken}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Logout",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"pm.sendRequest({\r",
-									"    url: pm.environment.get(\"base_url\") + \"/Auth/login\",\r",
-									"    method: \"POST\",\r",
-									"    header: { \"Content-Type\": \"application/json\" },\r",
-									"    body: {\r",
-									"        mode: \"raw\",\r",
-									"        raw: JSON.stringify({\r",
-									"            username: \"user\",\r",
-									"            password: \"Password123!\"\r",
-									"        })\r",
-									"    }\r",
-									"}, function (err, res) {\r",
-									"    if (err) {\r",
-									"        console.error(\"Login request failed:\", err);\r",
-									"        return;\r",
-									"    }\r",
-									"\r",
-									"    const jsonData = res.json();\r",
-									"    const token = jsonData.refreshToken;\r",
-									"\r",
-									"    // Save token to environment variable\r",
-									"    pm.environment.set(\"refreshToken\", token);\r",
-									"    console.log(\"New user refreshToken saved:\", token);\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {},
-								"requests": {}
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Request sent logout\", function () {\r",
-									"    pm.response.to.have.status(200); // Tjek status\r",
-									"});\r",
-									"\r",
-									"//kan lowkey ikke fejle"
-								],
-								"type": "text/javascript",
-								"packages": {},
-								"requests": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/Auth/logout?refreshToken={{refreshToken}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"Auth",
-								"logout"
 							],
 							"query": [
 								{

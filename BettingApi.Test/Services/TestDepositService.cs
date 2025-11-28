@@ -69,6 +69,30 @@ public class DepositServiceTests
         Assert.Equal(600, user.Balance); 
     }
 
+    // placeholder test for nu vi mangler en fejlende test
+    [Fact]
+    public async Task AddDepositAsync_ShouldNotAddDeposit_WhenDepositLimitExceeded()
+    {
+        // Arrange
+        var user = new UserAccount
+        {
+            UserAccountId = 1,
+            UserName = "Hans",
+            Balance = 100,
+            DepositLimit = 200
+        };
+
+        _userRepo.GetByIdAsync(1).Returns(user);
+
+        int amount = 500;
+
+        // Act
+        await _uut.AddDepositAsync(amount, 1);
+
+        // Assert
+        Assert.Equal(100, user.Balance); 
+    }
+
     // ---------- Hentning af deposits ----------
 
     [Fact]

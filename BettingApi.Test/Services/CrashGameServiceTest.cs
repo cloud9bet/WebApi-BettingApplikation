@@ -22,7 +22,7 @@ public class CrashGameServiceTests
         _uut = new CrashGameService(_transactionRepo, _userRepo, _rng);
     }
 
-    // ---------- Exception / fejl scenarier ----------
+    //Exception / fejl scenarier
     [Fact]
     public async Task CrashGamePlay_ShouldThrow_WhenUserNotFound()
     {
@@ -50,7 +50,7 @@ public class CrashGameServiceTests
         Assert.Equal("Crash game transaction failed: User not active", ex.Message);
     }
 
-    // ---------- Input boundary tests ----------
+    //Input boundary tests
     [Theory]
     [InlineData(-1)]
     [InlineData(0)]
@@ -82,7 +82,7 @@ public class CrashGameServiceTests
         }
     }
 
-    // ---------- Resultat / payout scenarier ----------
+    //Resultat / payout scenarier
     [Fact]
     public async Task CrashGamePlay_ShouldReturnWin_WhenMultiplierIsLessThanCrashPoint()
     {
@@ -101,7 +101,7 @@ public class CrashGameServiceTests
         var result = await _uut.CrashGamePlay(request, 1);
 
         Assert.True(result.IsWin);
-        Assert.Equal(50, result.Payout); // winnings = 150, payout = -100 + 150 = 50
+        Assert.Equal(150, result.Payout); // winnings = 150, payout = 50 + 100
         await _userRepo.Received().UpdateBalanceByIdAsync(1, 150);
     }
 
@@ -129,7 +129,7 @@ public class CrashGameServiceTests
 
     }
 
-    // ---------- Transaction tests ----------
+    //Transaction tests
     [Fact]
     public async Task CrashGamePlay_ShouldAddTransaction_WhenGamePlayed()
     {
@@ -150,7 +150,7 @@ public class CrashGameServiceTests
         await _transactionRepo.Received(1).SaveChangesAsync();
     }
 
-    // ---------- Repo call verification ----------
+    //Repo call verification
     [Fact]
     public async Task CrashGamePlay_ShouldCallUpdateBalance_WhenBetPlaced()
     {

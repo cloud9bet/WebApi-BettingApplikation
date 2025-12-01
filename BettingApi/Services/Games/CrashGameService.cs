@@ -63,7 +63,7 @@ public class CrashGameService : ICrashGameService
 
             double crashPoint = _rng.Generate();
             bool isWin = dto.CashoutMultiplier < crashPoint;
-            int payout = -dto.BetAmount;
+            int payout;
 
             if (isWin)
             {

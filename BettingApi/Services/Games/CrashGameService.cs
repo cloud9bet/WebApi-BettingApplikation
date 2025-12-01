@@ -63,12 +63,17 @@ public class CrashGameService : ICrashGameService
 
             double crashPoint = _rng.Generate();
             bool isWin = dto.CashoutMultiplier < crashPoint;
-            int payout;
+            
+            int netChange = -dto.BetAmount;
+            int payoutToUser = 0;
 
             if (isWin)
             {
                 int winnings = (int)(dto.BetAmount * dto.CashoutMultiplier);
-                payout += winnings;
+                
+                netChange += winnings;
+                payoutToUser = winnings;
+
                 await _userRepository.UpdateBalanceByIdAsync(userAccountId, winnings);
             }
 
@@ -76,7 +81,7 @@ public class CrashGameService : ICrashGameService
             {
                 UserAccountId = userAccountId,
                 Date = dateNow,
-                Amount = payout,
+                Amount = netChange,
                 GameName = "Crash"
             };
 
@@ -89,7 +94,7 @@ public class CrashGameService : ICrashGameService
             {
                 CrashPoint = crashPoint,
                 IsWin = isWin,
-                Payout = payout
+                Payout = payoutToUser
             };
         }
         catch (Exception ex)

@@ -14,8 +14,6 @@ public interface IRepository<T> where T : class
     void Delete(T entity);
     Task SaveChangesAsync();
     Task<IDbContextTransaction> BeginTransactionAsync();
-
-
 }
 
 public class Repository<T> : IRepository<T> where T : class

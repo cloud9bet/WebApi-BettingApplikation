@@ -69,24 +69,13 @@ public class CoinFlipService : ICoinFlipService
                         resultDto.Payout += dto.BetAmount * 2;
                     }
 
-                    // var transactions = await _transactionRepository.GetTransactionByGameNameAsync(id, "Coin Flip", dateNow);
-
-                    // if (transactions.Any())
-                    // {
-                    //     foreach (var transaction in transactions)
-                    //     {
-                    //         await _transactionRepository.UpdateGameTransactionByIdAsync(transaction.TransactionId, resultDto.Payout);
-                    //     }
-
-                    // }
-                    // else
-                    // {
+    
                     var Transaction = new Transaction
                     {
                         UserAccountId = id,
                         Date = dateNow,
                         Amount = resultDto.Payout,
-                        GameName = "Coin Flip"
+                        GameName = "CoinFlip"
                     };
 
                     await _transactionRepository.AddAsync(Transaction);

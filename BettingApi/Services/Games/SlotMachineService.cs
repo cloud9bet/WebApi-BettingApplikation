@@ -168,17 +168,6 @@ public class SlotMachineService : ISlotMachineService
                             result.Payout+=payout;
                         }
 
-                        // var transactions= await _transacationRepository.GetTransactionByGameNameAsync(id, "Slot", dateNow);
-
-                        // if(transactions.Any())
-                        // {
-                        //     foreach(var transaction in transactions)
-                        //     {
-                        //         await _transacationRepository.UpdateGameTransactionByIdAsync(transaction.TransactionId, result.Payout);
-                        //     }
-                        // }
-                        // else
-                        // {
                             var Transaction = new Transaction
                             {
                                 UserAccountId=id, 

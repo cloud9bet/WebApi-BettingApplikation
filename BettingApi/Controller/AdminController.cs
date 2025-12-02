@@ -36,7 +36,6 @@ namespace BettingApi.Controllers
             return NoContent();
         }
 
-//test det her endpoint
         [Authorize(Roles = "Admin")]
         [HttpGet("/[controller]/tag")]
         public async Task<ActionResult<IEnumerable<UserTagDto>>> GetAllUserTagsAsync()
@@ -69,6 +68,8 @@ namespace BettingApi.Controllers
 
         }
 
+
+        //det her endpoint bruges ikke og heller ikke på adminsiden skal nok fjernes
         [Authorize(Roles = "Admin")]
         [HttpGet("/[controller]/deposit")]
         public async Task<ActionResult<IEnumerable<DepositResultDto>>> GetAllUserDepositAsync()

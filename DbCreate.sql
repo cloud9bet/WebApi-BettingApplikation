@@ -1,7 +1,7 @@
 -- CREATE DATABASE BetAppDB;
 -- GO
 
-Use BetAppDB;
+Use cloud9bet_dk_db_betappdb;
 GO
 
 SELECT * FROM Transactions;

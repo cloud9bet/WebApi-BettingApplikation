@@ -42,62 +42,62 @@ namespace BettingApi.Data
 
             var testUserAccount = new UserAccount
             {
-                UserName = "user",
-                Balance = 10000
+                UserName = "User",
+                Balance = 50000
             };
 
             var UserAccountNr1 = new UserAccount
             {
-                UserName = "Andreas",
-                Balance = 5000
+                UserName = "Frosty",
+                Balance = 50000
             };
 
             var UserAccountNr2 = new UserAccount
             {
                 UserName = "Niclas",
-                Balance = 5000
+                Balance = 50000
             };
 
             var UserAccountNr3 = new UserAccount
             {
                 UserName = "Morty",
-                Balance = 5000
+                Balance = 50000
             };
 
             var UserAccountNr4 = new UserAccount
             {
                 UserName = "Pershy",
-                Balance = 5000
+                Balance = 50000
             };
 
             var UserAccountNr5 = new UserAccount
             {
                 UserName = "Yu",
-                Balance = 5000
+                Balance = 50000
             };
 
             var UserAccountNr6 = new UserAccount
             {
                 UserName = "Zak",
-                Balance = 5000
+                Balance = 50000
             };
 
             var UserAccountNr7 = new UserAccount
             {
-                UserName = "Malle",
-                Balance = 5000
+                UserName = "Bal",
+                Balance = 50000
             };
 
             var UserAccountNr8 = new UserAccount
             {
                 UserName = "Hiru",
-                Balance = 5000
+                Balance = 50000
             };
 
             var UserAccountNr9 = new UserAccount
             {
                 UserName = "Joe",
-                Balance = 5000
+                Balance = 50000
             };
 
             List<UserAccount> accounts = new List<UserAccount>{testUserAccount,UserAccountNr1,UserAccountNr2,UserAccountNr3,
@@ -110,73 +110,91 @@ namespace BettingApi.Data
 
             await context.SaveChangesAsync();
 
-            // Alle konti laver 4 deposits á 2500
+            Random rand = new Random();
+
+            int[] days = { 1, 2, 3, 4, 5, 6, 7 };
+            string[] games = { "Crash", "CoinFlip", "Slot" };
+
+
             foreach (var acc in accounts)
             {
-                for (int i = 0; i < 4; i++)
+                foreach (var d in days)
                 {
+
                     var dep = new Deposit
                     {
-                        Amount = 2500,
-                        Date = DateOnly.FromDateTime(DateTime.UtcNow),
+                        Amount = 2000,
+                        Date = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-d)),
                         UserAccount = acc
                     };
 
+                    acc.Balance += 2000;
                     await context.Deposits.AddAsync(dep);
                 }
             }
+
             await context.SaveChangesAsync();
 
-            // Halvdelen af kontiene (index 0 og op til 5) taber deres spil
+
+            // TABER-GRUPPE (index 0–4)
             for (int i = 0; i < 5; i++)
             {
                 var acc = accounts[i];
 
-                string[] games = { "Crash", "CoinFlip", "Slots" };
-
-                foreach (var game in games)
+                foreach (var d in days)
                 {
-                    // 2 transaktioner per spil
-                    for (int j = 0; j < 2; j++)
+                    foreach (var game in games)
                     {
-                        var trans = new Transaction
+                        // 70% chance for et tab, 30% chance for intet
+                        if (rand.NextDouble() < 0.7)
                         {
-                            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-                            Amount = -2500,
-                            GameName = game,
-                            UserAccount = acc
-                        };
+                            int lossAmount = rand.Next(300, 3001); 
 
-                        await context.Transactions.AddAsync(trans);
+                            var trans = new Transaction
+                            {
+                                Amount = -lossAmount,
+                                Date = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-d)),
+                                GameName = game,
+                                UserAccount = acc
+                            };
+
+                            acc.Balance -= lossAmount;
+                            await context.Transactions.AddAsync(trans);
+                        }
                     }
                 }
             }
 
-            // Halvdelen af kontiene (index 5 og op) vinder deres spil
+
+
+            // VINDER-GRUPPE (index 5 og op)
             for (int i = 5; i < accounts.Count; i++)
             {
                 var acc = accounts[i];
 
-                string[] games = { "Crash", "CoinFlip", "Slots" };
-
-                foreach (var game in games)
+                foreach (var d in days)
                 {
-                    // 2 transaktioner per spil
-                    for (int j = 0; j < 2; j++)
+                    foreach (var game in games)
                     {
-                        var trans = new Transaction
+                        // 60% chance for en gevinst
+                        if (rand.NextDouble() < 0.8)
                         {
-                            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-                            Amount = 2500,
-                            GameName = game,
-                            UserAccount = acc
-                        };
+                            int winAmount = rand.Next(100, 1501); 
 
-                        await context.Transactions.AddAsync(trans);
+                            var trans = new Transaction
+                            {
+                                Amount = winAmount,
+                                Date = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-d)),
+                                GameName = game,
+                                UserAccount = acc
+                            };
+
+                            acc.Balance += winAmount;
+                            await context.Transactions.AddAsync(trans);
+                        }
                     }
                 }
             }
-
 
             List<ApiUser> users = new List<ApiUser>();
 

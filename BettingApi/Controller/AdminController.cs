@@ -68,8 +68,6 @@ namespace BettingApi.Controllers
 
         }
 
-
-        //det her endpoint bruges ikke og heller ikke på adminsiden skal nok fjernes
         [Authorize(Roles = "Admin")]
         [HttpGet("/[controller]/deposit")]
         public async Task<ActionResult<IEnumerable<DepositResultDto>>> GetAllUserDepositAsync()
